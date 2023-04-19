@@ -13,7 +13,7 @@ local filepath = {
 
 local header = {
 	type = 7,
-	name = "GroundbreakinG Skin Ver.0.1 7Keys",
+	name = "GroundbreakinG Skin Ver.0.1 Result",
 	w = 1920,
 	h = 1080,
 	scene = 3600000,
@@ -71,45 +71,14 @@ local function main()
 		end
 	end
 
-	local levelY = 80
-	leveladd = 70
-	local tableh = 60
-	local tablef = 48
-
-	local level_str = main_state.text(1003)
-	if "" == level_str then
-		levelY = -10
-		tableh = 1
-		tablef = 1
-		leveladd = 90
-	end
-
-	local timingX = 2500
-	local playerX = 60
-	local playInfoX = 1776
-	local songInfoX = 60
-	local RGB = diffRGB()
-
-	if skin_config.option["Play Side"] == 900 then
-		timingX = 60
-		playerX = 2500
-		playInfoX = 60
-		songInfoX = 1776
-	end
-
  local timingX = 2500
 	local playerX = 300
-	local playInfoX = 300
 	local songInfoY = 210
 	local RGB = diffRGB()
 
-
-
-	local judgeY = 160
  local clearX = 525
 	local clearY = 415
 	local songX = 300
-	local ranY = 1053
 	local gaugeY = 428
 
 
@@ -150,16 +119,9 @@ local function main()
 		{id = "std",	filter = 1,	dst = {{x = timingX, y = 6, h = 24, r = 221, g = 229, b = 237}}},
 
 		--IR Info
-		-- {id = "player", op = {51, 922, -923},	filter = 1,	dst = {{x = playerX, y = 36, h = 24, r = 221, g = 229, b = 237}}},
-		-- {id = "ir", op = {51, 922, -923},	filter = 1,	dst = {{x = playerX, y = 6, h = 24, r = 221, g = 229, b = 237}}},
-		-- {id = "ir_rank", op = {51, 922, -923},	filter = 1,	dst = {{x = playerX + 200, y = 8, w = 16, h = 19}}},
-		-- {id = "ir_slash", op = {51, 922, -923},	filter = 1,	dst = {{x = playerX + 264, y = 8, w = 16, h = 19}}},
-		-- {id = "ir_total", op = {51, 922, -923},	filter = 1,	dst = {{x = playerX + 280, y = 8, w = 16, h = 19}}},
-		-- {id = "offline", op = {50, 922, -923},	filter = 1,	dst = {{x = playerX, y = 6, h = 24, r = 221, g = 120, b = 120}}},
-
-  {id = "player",	filter = 1,	dst = {{x = playerX + 480, y = 120, h = 24, r = 221, g = 229, b = 237}}},
-		{id = "ir_rank",	filter = 1,	dst = {{x = playerX + 110, y = 200, w = 36, h = 36}}},
-		{id = "ir_total",	filter = 1,	dst = {{x = playerX + 330, y = 200, w = 36, h = 36}}},
+  {id = "player",	 op = {51, 922, -923}, filter = 1,	dst = {{x = playerX + 480, y = 120, h = 24, r = 221, g = 229, b = 237}}},
+		{id = "ir_rank",	filter = 1,op = {51, 922, -923},	dst = {{x = playerX + 110, y = 200, w = 36, h = 36}}},
+		{id = "ir_total",	filter = 1, op = {51, 922, -923},	dst = {{x = playerX + 330, y = 200, w = 36, h = 36}}},
 		{id = "offline", op = {50, 922, -923},	filter = 1,	dst = {{x = playerX + 530, y = 380, h = 24, r = 221, g = 120, b = 120}}},
 
 		--Gauge Area

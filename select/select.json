@@ -223,8 +223,8 @@
 		{"id":"option-selector122", "src":59, "x":320, "y":170, "w":288, "h":760},
 		{"id":"option-selector123", "src":59, "x":320, "y":120,"w":288, "h":760},
 		{"id":"option-selector124", "src":59, "x":320, "y":70, "w":288, "h":760},
-		{"id":"option-selector125", "src":59, "x":320, "y":-20, "w":288, "h":760},
-		{"id":"option-selector126", "src":59, "x":320, "y":-70, "w":288, "h":760},
+		{"id":"option-selector125", "src":59, "x":320, "y":20, "w":288, "h":760},
+		{"id":"option-selector126", "src":59, "x":320, "y":-30, "w":288, "h":760},
 
 
 		{"id":"option-selector131", "src":59,"x":320, "y":220, "w":288, "h":760},
