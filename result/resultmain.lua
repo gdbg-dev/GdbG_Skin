@@ -170,7 +170,7 @@ local function main()
 		-- {id = "ratepercent",		loop = 200, dst = {{time = 0, x = 1644,	y = clearY + 253,	w = 21, h = 19, a = 0},{time = 200, a = 255}}}, --current
 
  --左の文字
- {id = "scoreframe", op = {91}, dst = {{x = 0, y = 10, h = 1080, w = 1320}}},
+ {id = "scoreframe", dst = {{x = 0, y = 10, h = 1080, w = 1320}}},
 
 		--Timing
 		{id = "fast",	loop = 200, dst = {{time = 0, x = 1320, y = 340, w = 32, h = 37, a = 0},{time = 200, a = 255}}},
