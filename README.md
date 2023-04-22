@@ -1,4 +1,4 @@
-# GroundbreakinG Skin Ver 0.5.0
+# GroundbreakinG Skin (Beta)
 (最終更新 2023/04/20)
 beatoraja用のスキンです。Select/Decide/Play(7Key)/Resultが同封されています。
 
@@ -17,22 +17,6 @@ luaを専門に扱っていないスタッフが作成したため、意図せ�
 本スキンの二次配布を禁止します。改変については、不具合修正や上級者用機能搭載などの個人利用に限り認めます。
 
 本スキンを利用したことで発生した不具合や不利益について、GroundbreakinGは一切の責任を負えません。ご理解の上、使用してください。
-
-Donate
-GroundbreakinGを支援する
-
-**このスキンはベータ版です。**
-- luaを専門に扱っていないスタッフが作成したため、意図せぬ不具合が起こる可能性が高いです。  
-不具合を発見した場合、以下の方法のいずれかを使用して報告してください。迅速に修正対応します。
-
-  ①[専用Googleフォームより報告](https://forms.gle/UGf3T3ExEdtHgVw16)
-
-  ②[GitHubレポジトリのIssueに報告](https://github.com/gdbg-dev/GdbG_Skin/issues)
-
-- 本スキンの二次配布を禁止します。改変については、不具合修正や上級者用機能搭載などの個人利用に限り認めます。
-
-
-- 本スキンを利用したことで発生した不具合や不利益について、GroundbreakinGは一切の責任を負えません。ご理解の上、使用してください。
 
 ## フォントについて 
 使用されているフォントはRoboto Monoを除き「SIL Open Font License (OFL)」の基に利用しています。  
