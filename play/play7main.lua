@@ -21,14 +21,13 @@ local function append_all(list, list1)
 end
 
 local category = {
-	{name = "Main", item = {
+	{name = "メイン", item = {
 		"main_1",
 		"main_2",
-		"main_4",
 		"main_5",
 		"main_6"
 	}},
-	{name = "Play", item = {
+	{name = "プレイ", item = {
 		"play_1",
 		"play_2",
   "play_3",
@@ -42,22 +41,12 @@ local category = {
 		"play_7",
 		"play_15",
 		"play_8",
-		"play_9",
 		"play_10",
 		"play_11",
 		"play_12",
 		"play_13",
 		"play_14",
 	}},
-	{name = "Player Info", item = {
-		"info_1",
-		"info_2",
-		"info_3",
-		"info_4",
-		"info_5",
-		"info_6",
-		"info_7"
-	}}
 
 }
 
@@ -70,40 +59,20 @@ local property = {
 		{name = "1P側(左)", op = 902},
 		{name = "2P側(右)", op = 906},
 	}},
-	{name = "Scratch Keybeam", category = "play_15", def = "Scratch", item = {
-		{name = "Scratch", op = 922},
-		{name = "Keyboard", op = 923}
+	{name = "スクラッチキービーム", category = "play_15", def = "Scratch", item = {
+		{name = "スクラッチ", op = 922},
+		{name = "キーボード", op = 923}
 	}},
 	{name = "ターゲット", category = "play_3", def = "Off", item = {
-		{name = "Off", op = 912},
+		{name = "なし", op = 912},
 		{name = "ベストスコア", op = 913},
 		{name = "ターゲットスコア", op = 914}
 	}},
 	{name = "Fast/Slow", category = "play_5", def = "Off", item = {
-		{name = "Off", op = 915},
-		{name = "On", op = 916},
-		{name = "On(+スコア差分)", op = 926},
-	}},
-	{name = "F/S Bomb", category = "play_9", def = "Off", item = {
-		{name = "Off", op = 917},
-		{name = "On", op = 918}
-	}},
-	{name = "Score Rate", category = "play_18", def = "Off", item = {
-		{name = "Off", op = 928},
-		{name = "On", op = 929}
-	}},
-
-
-	{name = "Notes Graph", category = "play_14", def = "Judge", item = {
-		{name = "Judge", op = 910},
-		{name = "Fast/Slow", op = 911}
-	}},
-
-	-- {name = "Player Info", category = "info_1", def = "Off", item = {
-	-- 	{name = "Off", op = 908},
-	-- 	{name = "On", op = 909}
-	-- }},
-
+		{name = "なし", op = 915},
+		{name = "あり", op = 916},
+		{name = "あり(+スコア差分)", op = 926},
+	}}
 }
 
 local function isScratchRight()
@@ -166,14 +135,11 @@ local function f_info_pos()
 end
 
 local function isTargetBest()
-	return skin_config.option["Target"] == 913
+	return skin_config.option["ターゲット"] == 913
 end
 
-local function isScoreRateOn()
-	return skin_config.option["Score Rate"] == 929
-end
 local function isKeybeamKB()
-	return skin_config.option["Scratch Keybeam"] == 923
+	return skin_config.option["スクラッチキービーム"] == 923
 end
 local function isFastSlowOn()
 	return skin_config.option["Fast/Slow"] == 916
@@ -181,46 +147,23 @@ end
 local function isFastSlowMS()
 	return skin_config.option["Fast/Slow"] == 926
 end
-local function isFSbombOn()
-	return skin_config.option["F/S Bomb"] == 918
-end
-
-local function isGraphJudge()
-	return skin_config.option["Notes Graph"] == 910
-end
-
-local function isPlayerinfoOn()
-	return skin_config.option["Player Info"] == 909
-end
 
 
 
 local filepath = {
-	{name = "BG", category = "main_4", path = "common/bg/*.png", def = "_default"},
-
-	{name = "Notes", category = "play_1", path = "parts/notes/*.png"},
-	{name = "Judge", category = "play_2", path = "parts/judge/*.png", def = "_default2"},
-	{name = "Keybeam", category = "play_7", path = "parts/keybeam/*.png", def = "medium"},
-	{name = "Bomb", category = "play_8", path = "parts/bomb/*.png", def = "_default"},
-	{name = "Lane Cover", category = "play_11", path = "parts/lanecover/*.png", def = "_default"},
-	{name = "Lift Cover", category = "play_12", path = "parts/liftcover/*.png", def = "_default"},
-	{name = "Hidden Cover", category = "play_13", path = "parts/hiddencover/*.png", def = "_black"},
-
-
-	{name = "Player Icon", category = "info_2", path = "common/player info/icon/*.png", def = "_default"},
-	{name = "Player Color", category = "info_3", path = "common/player info/lamp color/*.png", def = "Red"},
-	{name = "---「Freespace」についての詳細はreadmeをご覧ください---", category = "info_4", path = "system/-"},
-	{name = "Freespace", category = "info_5", path = "common/player info/freespace/*.png", def = "_off" },
-	{name = "---名前下の自由入力欄に文字を表示させたい場合は、---", category = "info_6", path = "system/-"},
-	{name = "---player info/freespace.luaを編集してください---", category = "info_7", path = "system/-"},
+	{name = "ノーツ", category = "play_1", path = "parts/notes/*.png"},
+	{name = "判定", category = "play_2", path = "parts/judge/*.png", def = "_default2"},
+	{name = "キービーム", category = "play_7", path = "parts/keybeam/*.png", def = "medium"},
+	{name = "ボム", category = "play_8", path = "parts/bomb/*.png", def = "_default"},
+	{name = "レーンカバー", category = "play_11", path = "parts/lanecover/*.png", def = "_default"},
+	{name = "リフトカバー", category = "play_12", path = "parts/liftcover/*.png", def = "_default"},
+	{name = "HIDDEN用カバー", category = "play_13", path = "parts/hiddencover/*.png", def = "_black"}
 
 }
 
 local offset = {
-	{name = "Lane Darkness 0~255", category = "play_10", id = 50, x = false, y = false, w = false, h = false, r = false, a = true},
-	{name = "F/S Position", category = "play_6", id = 53, x = true, y = true, w = false, h = false, r = false, a = false},
-	{name = "BGA Darkness 0~255", category = "main_6", id = 55, x = false, y = false, w = false, h = false, r = false, a = true},
-	{name = "Score Rate Position", category = "play_19", id = 56, x = true, y = true, w = false, h = false, r = false, a = false},
+	{name = "レーンの明るさ(0~255)", category = "play_10", id = 50, x = false, y = false, w = false, h = false, r = false, a = true},
+	{name = "BGAの明るさ(0~255)", category = "main_6", id = 55, x = false, y = false, w = false, h = false, r = false, a = true}
 
 }
 
@@ -873,19 +816,19 @@ local function main()
 
 	--曲の長さスライダー
  if is2P() then
-	table.insert(skin.destination,
+  table.insert(skin.destination,
+  {id = "song-progress-bar", dst = {
+   {x = 1870, y = 0, w = 70, h = 1080}}})
+  table.insert(skin.destination,
+  {id = "song-progress", dst = {
+   {x = 1883, y = 1007, w = 18, h = 30}}})
+ else
+ 	table.insert(skin.destination,
 	{id = "song-progress-bar", dst = {
 		{x = 0 - geometry.info_position, y = 0, w = 70, h = 1080}}})
 	table.insert(skin.destination,
 	{id = "song-progress", dst = {
 		{x = 13  - geometry.info_position, y = 1007, w = 18, h = 30}}})
- else
-  table.insert(skin.destination,
-  {id = "song-progress-bar", dst = {
-   {x = 0 - geometry.info_position, y = 0, w = 70, h = 1080}}})
-  table.insert(skin.destination,
-  {id = "song-progress", dst = {
-   {x = 13  - geometry.info_position, y = 1007, w = 18, h = 30}}})
  end
 		
 
@@ -896,7 +839,7 @@ local function main()
 
 	--枠
 	table.insert(skin.destination, {id = "BPM-bar", dst = {
-  {x = 875 - geometry.info_position, y = 80, w = 1027, h = 39}}})
+  {x = 875 - geometry.info_position, y = 80, w = 1000, h = 34}}})
 	--今のBPM
 	table.insert(skin.destination, {id = "BPM-now", dst = {
 		{x = 1270 - geometry.info_position, y = 125, w = 49, h = 56}}})
@@ -913,45 +856,45 @@ local function main()
   {x = 1270 - geometry.info_position, y = 125, w = 60, h = 21}}})
 	
 
-	--プレイヤー情報
-	--ここから
-	if isPlayerinfoOn() then
+	-- --プレイヤー情報
+	-- --ここから
+	-- if isPlayerinfoOn() then
 
-		--自由スペース・アイコン
-		table.insert(skin.destination, {id = "player-freespace", filter = 1, dst = {{x = 115 + geometry.info_position, y = 45, w = 500, h = 70}}})
-		table.insert(skin.destination, {id = "player-icon", filter = 1, dst = {{x = 35 + geometry.info_position, y = 45, w = 70, h = 70}}})
-		--プレイヤーの名前
-		table.insert(skin.destination, {id = "playername", filter = 1, dst = {{x = 120 + geometry.info_position, y = 76, w = 480, h = 32}}})
+	-- 	--自由スペース・アイコン
+	-- 	table.insert(skin.destination, {id = "player-freespace", filter = 1, dst = {{x = 115 + geometry.info_position, y = 45, w = 500, h = 70}}})
+	-- 	table.insert(skin.destination, {id = "player-icon", filter = 1, dst = {{x = 35 + geometry.info_position, y = 45, w = 70, h = 70}}})
+	-- 	--プレイヤーの名前
+	-- 	table.insert(skin.destination, {id = "playername", filter = 1, dst = {{x = 120 + geometry.info_position, y = 76, w = 480, h = 32}}})
 
-		--間の線
-		table.insert(skin.destination, 
-			{id = "player-line", loop = 600, dst = {
-				{time = 0, x = 115 + geometry.info_position, y = 75, w = 0, h = 3, acc = 2},
-				{time = 100},
-				{time = 600, w = 335}
-		}})
+	-- 	--間の線
+	-- 	table.insert(skin.destination, 
+	-- 		{id = "player-line", loop = 600, dst = {
+	-- 			{time = 0, x = 115 + geometry.info_position, y = 75, w = 0, h = 3, acc = 2},
+	-- 			{time = 100},
+	-- 			{time = 600, w = 335}
+	-- 	}})
 
-		--名前下の自由入力欄
-		--ここから
-		table.insert(skin.font, {id = 2, path = "font/Mplus1p-Regular.ttf"})
-			--公式のサンプルコピペしてる　マジで何してるかわからん
-			local lua_path = skin_config.get_path("common/player info/freespace.lua")
-			local frame_parts_status, frame_parts = pcall(function()
-				return dofile(lua_path).load(1)
-			end)
+	-- 	--名前下の自由入力欄
+	-- 	--ここから
+	-- 	table.insert(skin.font, {id = 2, path = "font/Mplus1p-Regular.ttf"})
+	-- 		--公式のサンプルコピペしてる　マジで何してるかわからん
+	-- 		local lua_path = skin_config.get_path("common/player info/freespace.lua")
+	-- 		local frame_parts_status, frame_parts = pcall(function()
+	-- 			return dofile(lua_path).load(1)
+	-- 		end)
 
-			if frame_parts_status and frame_parts then
-				for _, v in ipairs(frame_parts.text) do
-					table.insert(skin.text, v)
-				end
-			end
-			--ここまでコピペ
-			table.insert(skin.destination, {id = "freespace-tx", filter = 1, dst = {{x = 120 + geometry.info_position, y = 47, w = 480, h = 19}}})
-		--名前下の自由入力欄
-		--ここまで
-	end
-	--プレイヤー情報
-	--ここまで
+	-- 		if frame_parts_status and frame_parts then
+	-- 			for _, v in ipairs(frame_parts.text) do
+	-- 				table.insert(skin.text, v)
+	-- 			end
+	-- 		end
+	-- 		--ここまでコピペ
+	-- 		table.insert(skin.destination, {id = "freespace-tx", filter = 1, dst = {{x = 120 + geometry.info_position, y = 47, w = 480, h = 19}}})
+	-- 	--名前下の自由入力欄
+	-- 	--ここまで
+	-- end
+	-- --プレイヤー情報
+	-- --ここまで
 
 
 --曲情報エリア
@@ -1248,26 +1191,26 @@ end
 end
 
 --レーン上でのレート表示
-if isScoreRateOn() then
-table.insert(skin.destination,	{
-	id = "l-rate-num", offsets = {3, 32, 56}, op = {32}, loop = -1, timer = 46, dst = {
-		{time = 0, x = geometry.lane_x + geometry.judge_x + geometry.play_position + 43, y = geometry.judge_y + (-23), w = 15, h = 18},
-		{time = 500}
-	}
-})
-table.insert(skin.destination,	{
-	id = "l-rate-adot-num", offsets = {3, 32, 56}, op = {32}, loop = -1, timer = 46, dst = {
-		{time = 0, x = geometry.lane_x + geometry.judge_x + geometry.play_position + 43 + 51, y = geometry.judge_y + (-23), w = 15, h = 18},
-		{time = 500}
-	}
-})
-table.insert(skin.destination,	{
-	id = "l-rate-DnP", offsets = {3, 32, 56}, op = {32}, loop = -1, timer = 46, dst = {
-		{time = 0, x = geometry.lane_x + geometry.judge_x + geometry.play_position + 43 + 45, y = geometry.judge_y + (-23), w = 56, h = 18},
-		{time = 500}
-	}
-})
-end
+-- if isScoreRateOn() then
+-- table.insert(skin.destination,	{
+-- 	id = "l-rate-num", offsets = {3, 32, 56}, op = {32}, loop = -1, timer = 46, dst = {
+-- 		{time = 0, x = geometry.lane_x + geometry.judge_x + geometry.play_position + 43, y = geometry.judge_y + (-23), w = 15, h = 18},
+-- 		{time = 500}
+-- 	}
+-- })
+-- table.insert(skin.destination,	{
+-- 	id = "l-rate-adot-num", offsets = {3, 32, 56}, op = {32}, loop = -1, timer = 46, dst = {
+-- 		{time = 0, x = geometry.lane_x + geometry.judge_x + geometry.play_position + 43 + 51, y = geometry.judge_y + (-23), w = 15, h = 18},
+-- 		{time = 500}
+-- 	}
+-- })
+-- table.insert(skin.destination,	{
+-- 	id = "l-rate-DnP", offsets = {3, 32, 56}, op = {32}, loop = -1, timer = 46, dst = {
+-- 		{time = 0, x = geometry.lane_x + geometry.judge_x + geometry.play_position + 43 + 45, y = geometry.judge_y + (-23), w = 56, h = 18},
+-- 		{time = 500}
+-- 	}
+-- })
+-- end
 
 
 	--ボム ModernChicと同一規格　ほぼModernChicからのコピペ　本当にありがとうございます。大変申し訳無い。
@@ -1283,12 +1226,8 @@ end
 	local bombHeight = 300
 	local adjustPosY = 0
 
-	if isFSbombOn() then
-		modernchicLnPosY = {900, 900, 900, 900, 900, 900, 900, 900}
-	else
 		modernchicLnPosY = {300, 600, 300, 600, 300, 600, 300, 900}
 
-	end
 		-- ボム中心点
 		if isScratchRight() then
 			bombPosX = {30, 87, 144, 201, 258, 315, 372, 459}
@@ -1342,45 +1281,7 @@ end
 		})
 		-- 爆発エフェクト
 	-- 通常爆発エフェクトの配置
-	if isFSbombOn() then
 
-		local function value_judge(index)
-			if index == 8 then
-				return 500
-			else
-				return 500 + index
-			end
-		end
-		
-			for i = 1, 8 do
-				local name = i
-				if i == 25 then
-					name = "su"
-				elseif i == 26 then
-					name = "sd"
-				end
-				table.insert(skin.imageset, {
-					id = i + 109,
-					ref = value_judge(i),
-					images = { "fastbomb-"..b_init[i], "bomb-"..b_init[i], "fastbomb-"..b_init[i], "slowbomb-"..b_init[i] }
-				})
-			end
-		
-			for i = 1, 8 do
-				table.insert(skin.destination, {
-					id = 109 + i,
-					timer = bombTimer[i],
-					blend = 2,
-					loop = -1,
-					offsets = {3},
-					dst = {
-						{ time = 0, x = geometry.play_position + geometry.lane_x + geometry.lane_line_width + bombPosX[i] - bombWidth / 2, y = geometry.lane_y + geometry.lane_line_width - (bombHeight / 2), w = bombWidth, h = bombHeight},
-						{ time = bombCycle - 1}
-					}
-				})
-			end
-
-	else
 		for i = 1, #b_init, 1 do
 			table.insert(skin.destination, {
 				id = "bomb-"..b_init[i], offset = 3, loop = -1, filter = 1, timer = bombTimer[i], blend = 2, dst = {
@@ -1389,7 +1290,7 @@ end
 				}
 			})
 		end
-	end
+
 	-- LN爆発エフェクトの配置
 	for i = 1, #b_init, 1 do
 		table.insert(skin.destination,	{
