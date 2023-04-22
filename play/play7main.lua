@@ -258,13 +258,12 @@ local function main()
   {id = "bar", path = "parts/system/song-bar.png"},
 		{id = "system_src", path = "parts/system/system.png"},
   {id = "score_head", path = "parts/system/score_head.png"},
+  {id = "time-hispeed", path = "parts/system/timehispeed.png"},
   {id = "BPM-bar", path = "parts/system/bpmbar.png"},
   {id = "graph-grid", path = "parts/system/graphgrid.png"},
 		{id = "soundonly_src", path = "common/sound only/*.png"},
 		{id = "nostagefile_src", path = "common/stagefile/*.png"},
-  {id = "time-hispeed", path = "parts/system/timehispeed.png"},
-
-
+  {id = "failedbg", path = "parts/failed.png"},
 		{id = "notes_src", path = "parts/notes/*.png"},
 		{id = "judge_src", path = "parts/judge/*.png"},
 		{id = "keybeam_src", path = "parts/keybeam/*.png"},
@@ -287,6 +286,7 @@ local function main()
 
 	skin.image = {
 		{id = "bg", src = "bg_src", x = 0, y = 0, w = 1920, h = 1080},
+  {id = "failedbg", src = "failedbg", x = 0, y = 0, w = 1920, h = 1080},
 		{id = "bga_soundonly", src = "soundonly_src", x = 0, y = 0, w = -1, h = -1},
 		{id = "head-line", src = "system_src", x = 622, y = 180, w = 250, h = 3},
 
@@ -1850,22 +1850,17 @@ table.insert(skin.destination,
 
 --閉店
 table.insert(skin.destination,
-	{id = -111, timer = 3, loop = 250, dst = {
-		{time = 0, x = 0, y = 0, w = 1920, h = 1080, a = 0, r = 26, g = 26, b = 26, acc = 2},
+	{id = "failedbg", timer = 3, loop = 500, dst = {
+		{time = 0, x = 0, y = 1080, w = 1920, h = 1080},
 		{time = 50},
-		{time = 250, a = 255}
+		{time = 500, y=0}
 }})
 table.insert(skin.destination,
-	{id = "failed", timer = 3, loop = 750, dst = {
-		{time = 0, x = 765, y = 480, w = 440, h = 120, a = 0},
+	{id = "failed", timer = 3, loop = 6000, dst = {
+		{time = 0, x = 382, y = 480, w = 880, h = 240, a = 0},
 		{time = 500},
-		{time = 750, a = 255}
-}})
-table.insert(skin.destination,
-	{id = "lamp_failed", timer = 3, loop = 1250, dst = {
-		{time = 0, x = 715, y = 480, w = 50, h = 120, a = 0},
-		{time = 1000},
-		{time = 1250, a = 255}
+		{time = 700, x = 460,a = 255},
+  {time = 6000, a = 255, x = 660}
 }})
 
 

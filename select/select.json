@@ -20,7 +20,7 @@
 	"scene":3000,
 	"input":500,
 	"filepath":[
-		{"name":"Background", "path":"background/*.png"}
+		{"name":"背景", "path":"background/*.png"}
 	],
 	"source": [
 		{"id":0, "path":"sys.png"},

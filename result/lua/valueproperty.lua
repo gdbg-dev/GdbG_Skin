@@ -1,8 +1,8 @@
 local module = {}
 
 module.value = {
-  {id = "bestscore",		src = "parts", x = 750, y = 792, w = 352, h = 37, divx = 11, digit = 4, ref = 170},
-  {id = "currentscore",		src = "parts", x = 750, y = 792, w = 352, h = 37, divx = 11, digit = 4, ref = 71},
+  {id = "bestscore",		src = "parts", x = 750, y = 792, w = 352, h = 40, divx = 11, digit = 4, ref = 170},
+  {id = "currentscore",		src = "parts", x = 750, y = 792, w = 352, h = 40, divx = 11, digit = 4, ref = 71},
   {id = "diffscore",	src = "parts", x = 750, y = 870, w = 192, h = 36, divx = 12, divy = 2, digit = 5, zeropadding = 5, ref = 152},
   {id = "bestcombo",		src = "parts", x = 750, y = 792, w = 352, h = 37, divx = 11, digit = 4, ref = 173},
   {id = "currentcombo",		src = "parts", x = 750, y = 792, w = 352, h = 37, divx = 11, digit = 4, ref = 75},
@@ -28,7 +28,7 @@ module.value = {
   {id = "epf",		src = "parts", x = 750, y = 755, w = 352, h = 37, divx = 11, digit = 4, ref = 421},
   {id = "eps",		src = "parts", x = 750, y = 829, w = 352, h = 37, divx = 11, digit = 4, ref = 422},
   {id = "fast",		src = "parts", x = 750, y = 755, w = 352, h = 37, divx = 11, digit = 4, ref = 423},
-  {id = "slow",		src = "parts", x = 750, y = 829, w = 352, h = 37, divx = 11, digit = 4, ref = 424},
+  {id = "slow",		src = "parts", x = 750, y = 831, w = 352, h = 37, divx = 11, digit = 4, ref = 424},
   {id = "cb",		src = "parts", x = 750, y = 792, w =   352, h = 37, divx = 11, digit = 4, ref = 425},
 }
 
