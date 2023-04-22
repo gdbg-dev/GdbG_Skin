@@ -58,6 +58,7 @@ module.text = {
   --{id = "table",	font = 0, size = 24, align = 1, constantText = table_str},
 
   {id = "title",	font = 0, size = 56, align = 0, overflow = 1, constantText = main_state.text(10)},
+  {id = "subtitle",	font = 0, size = 56, align = 0, overflow = 1, constantText = main_state.text(11)},
   {id = "artist",	font = 0, size = 24, align = 0, overflow = 1, constantText = main_state.text(14)},
   {id = "bpm",	font = 0, size = 24, align = 0, overflow = 1, constantText = bpm_str},
   {id = "duration",	font = 0, size = 24, align = 0, overflow = 1, constantText = duration_str},

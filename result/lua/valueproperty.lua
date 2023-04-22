@@ -34,7 +34,7 @@ module.value = {
 
 for i = 0, 4 do
   table.insert(module.value, {id = "jg"..i,		src = "parts", x = 750, y = 792, w = 352, h = 37, divx = 11, digit = 4, ref = 110 + 1 * i})
-  table.insert(module.value, {id = "jgf"..i,		src = "parts", x = 750, y = 755, w = 352, h = 37, divx = 11, digit = 4, ref = 410 + 2 * i})
+  table.insert(module.value, {id = "jgf"..i,		src = "parts", x = 750, y = 753, w = 352, h = 37, divx = 11, digit = 4, ref = 410 + 2 * i})
   table.insert(module.value, {id = "jgs"..i,		src = "parts", x = 750, y = 829, w = 352, h = 37, divx = 11, digit = 4, ref = 411 + 2 * i})
 end
 table.insert(module.value, {id = "miss",		src = "parts", x = 750, y = 792, w = 352, h = 37, divx = 11, digit = 4, ref = 420})

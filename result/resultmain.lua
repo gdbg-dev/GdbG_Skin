@@ -120,7 +120,7 @@ local function main()
 
 		--IR Info
   {id = "player",	 op = {51, 922, -923}, filter = 1,	dst = {{x = playerX + 480, y = 120, h = 24, r = 221, g = 229, b = 237}}},
-		{id = "ir_rank",	filter = 1,op = {51, 922, -923},	dst = {{x = playerX + 110, y = 200, w = 36, h = 36}}},
+		{id = "ir_rank",	filter = 1,op = {51, 922, -923},	dst = {{x = playerX + 90, y = 200, w = 36, h = 36}}},
 		{id = "ir_total",	filter = 1, op = {51, 922, -923},	dst = {{x = playerX + 330, y = 200, w = 36, h = 36}}},
 		{id = "offline", op = {50, 922, -923},	filter = 1,	dst = {{x = playerX + 530, y = 380, h = 24, r = 221, g = 120, b = 120}}},
 
@@ -135,11 +135,12 @@ local function main()
 		--Clear Info Area
 
 		--Song Info
-		{id = "stagefile", op = {910,190}, stretch = 1, filter = 1, dst = {{x = 1540, y = 40, w = 380, h = 285}}},
-		{id = -100, op = {910,191}, stretch = 1, filter = 1, dst = {{x = 1540, y = 40, w = 380, h = 285}}},
+		{id = "stagefile", op = {910,190}, stretch = 1, filter = 1, dst = {{x = 1490, y = 40, w = 380, h = 285}}},
+		{id = -100, op = {910,191}, stretch = 1, filter = 1, dst = {{x = 1490, y = 40, w = 380, h = 285}}},
 
-		{id = "title", filter = 1, dst = {{x = songX + 60, y = songInfoY + 750, w = 340, h = 48, r = 221, g = 229, b = 237}}},
-  {id = "artist", filter = 1, dst = {{x = songX + 60, y = songInfoY + 700, w =340, h = 48, r = 221, g = 229, b = 237}}},
+		{id = "title", filter = 1, dst = {{x = songX + 60, y = songInfoY + 780, w = 340, h = 48, r = 221, g = 229, b = 237}}},
+  {id = "subtitle", filter = 1, dst = {{x = songX + 60, y = songInfoY + 750, w = 680, h = 24, r = 37, g = 230, b = 239}}},
+  {id = "artist", filter = 1, dst = {{x = songX + 60, y = songInfoY + 700, w =680, h = 48, r = 221, g = 229, b = 237}}},
   {id = "difficulty",	filter = 1, dst = {{x = songX + 60 , y = songInfoY + 600, w = 475, h = 24, r = RGB[1], g = RGB[2], b = RGB[3]}}},
 
   {id = "notes", filter = 1, dst = {{x = songX + 288 + 150,  y = songInfoY + 600, w = 280, h = 30, r = 221, g = 229, b = 237}}},
