@@ -76,7 +76,7 @@ local function main()
 	local songInfoY = 210
 	local RGB = diffRGB()
 
- local clearX = 525
+ local clearX = 530
 	local clearY = 415
 	local songX = 300
 	local gaugeY = 428
@@ -175,7 +175,7 @@ local function main()
 
 		--Timing
 		{id = "fast",	loop = 200, dst = {{time = 0, x = 1320, y = 340, w = 32, h = 37, a = 0},{time = 200, a = 255}}},
-		{id = "slow",	loop = 200, dst = {{time = 0, x = 1320, y = 300, w = 32, h = 37, a = 0},{time = 200, a = 255}}},
+		{id = "slow",	loop = 200, dst = {{time = 0, x = 1320, y = 299, w = 32, h = 37, a = 0},{time = 200, a = 255}}},
 		{id = "cb",	loop = 200, dst = {{time = 0, x = 1320, y = 260, w = 32, h = 37, a = 0},{time = 200, a = 255}}},
 	}
 	--Grades

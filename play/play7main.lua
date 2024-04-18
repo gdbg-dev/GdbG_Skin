@@ -14,11 +14,6 @@
 
 main_state = require("main_state")
 
-local function append_all(list, list1)
-	for i, v in ipairs(list1) do
-		table.insert(list, v)
-	end
-end
 
 local category = {
 	{name = "メイン", item = {
@@ -114,7 +109,7 @@ local function f_score_pos()
 	if index == 902 then
 		value = 0
 	elseif index == 906  then
-		value = 450
+		value = 480
 	else
 		value = 1280
 	end
@@ -214,9 +209,9 @@ local function main()
 	geometry.lane_line_src = 900
 	geometry.judge_x = 140
 	geometry.judge_y = 430
-	geometry.bga_y = 390
-	geometry.bga_w = 640
-	geometry.bga_h = 480
+	geometry.bga_y = 510
+	geometry.bga_w = 800
+	geometry.bga_h = 650
 
 
 	local notesInfo = {
@@ -316,7 +311,7 @@ local function main()
 		{id = "playoption_frame", src = "system_src", x = 900, y = 117, w = 560, h = 179},
 
 		{id = "gauge-DnP", src = "system_src", x = 390, y = 1127, w = 79, h = 36},
-		{id = "rate-DnP1", src = "system_src", x = 428, y = 1452, w = 94, h = 20},
+		{id = "rate-DnP1", src = "system_src", x = 408, y = 1452, w = 50, h = 50},
   {id = "rate-DnP2", src = "system_src", x = 435, y = 1452, w = 94, h = 37},
 
 
@@ -352,7 +347,7 @@ local function main()
 		{id = "BPM-head", src = "system_src", x = 622, y = 280, w = 250, h = 60},
 		{id = "BPM-bar", src = "BPM-bar", x = 0, y = 0, w = 1027, h =39},
 		{id = "BPM-no-change", src = "system_src", x = 1307, y = 300, w = 80, h = 41},
-		{id = "song-time-colon", src = "system_src", x = 0, y = 1400, w = 2, h = 20},
+		{id = "song-time-colon", src = "system_src", x = 0, y = 1400, w = 100, h = 100},
 		{id = "song-progress-bar", src = "bar", x = 0, y = 0, w = 70, h = 1080},
 
 		{id = "failed", src = "system_src", x = 1000, y = 1050, w = 440, h = 120},
@@ -538,6 +533,7 @@ local function main()
 		{id = "tablename", font = 0, size = 26, ref = 1003, overflow = 1},
 		{id = "title", font = 1, align = 0, size = 21, ref = 12, overflow = 1},
 		{id = "playername", font = 1, size = 32, ref = 2, overflow = 1},
+  {id = "targetname", font = 1, size = 25, ref = 1, overflow = 1, align = 0},
 
 		{id = "load-genre", font = 0, size = 27, ref = 13, overflow = 1},
 		{id = "load-title", font = 1, size = 73, ref = 12, overflow = 1},
@@ -732,37 +728,45 @@ local function main()
 	skin.timingvisualizer = {
 		{id = "timing"}
 	}
-	skin.destination = {
-		{id = "bg", stretch = 1, dst = {
-			{x = 0, y = 0, w = 1920, h = 1080}}},
+ 
+	skin.destination = {}
 
+   table.insert(skin.destination, {id = "bg", stretch = 1, dst = {
+    {x = 0, y = 0, w = 1920, h = 1080}}})
 
---BGA関連
-		{id = -110, dst = {
-			{x = 900 - geometry.info_position, y = 200, w = 1024, h = 768}}},
+--BGA関連	
 
-	
-		{id = "bga", dst = {
-			{x = 900 - geometry.info_position , y = 200, w = 1024, h = 768}}},
-
-		{id = -101, loop = 400, op = {80, 195}, filter = 1, stretch = 1, dst = {
-			{time = 0, x = -geometry.info_position, y = geometry.bga_y, w = geometry.bga_w, h = geometry.bga_h, a = 0},
-			{time = 400, a = 255}}},
-	
-	
-		{id = "bga_soundonly", stretch = 1, draw = function()
-			if main_state.option(40) or main_state.option(170) then
-				return true
-			end
-		end, timer = 41, loop = 800, dst = {
-			{time = 0, x = geometry.info_position, y = geometry.bga_y, w = geometry.bga_w, h = geometry.bga_h, a = 0},
-			{time = 500},
-			{time = 800, a = 255}}},
-					
-		{id = -110, timer = 41, offset = 55, dst = {
-			{x = geometry.info_position, y = geometry.bga_y, w = geometry.bga_w, h = geometry.bga_h, a = 0}}},
-	
-	}
+ if is2P() then
+  table.insert(skin.destination, {id = "bga", filter = 1, dst = {{x = -780+geometry.info_position , y = 200, w = geometry.bga_w, h = geometry.bga_h}}})
+ -- table.insert(skin.destination, {id = -101, loop = 400, op = {80, 195}, filter = 1, stretch = 1, dst = {
+ --  {time = 0, x =900, y = geometry.bga_y, w = 300,h=300, a = 0},
+ --  {time = 400, a = 255}}})
+  table.insert(skin.destination, {id = "bga_soundonly", stretch = 1, draw = function()
+   if main_state.option(40) or main_state.option(170) then
+    return true
+   end
+  end, timer = 41, loop = 800, dst = {
+   {time = 0, x =-780+geometry.info_position,  y = 200, w = geometry.bga_w, h = geometry.bga_h, a = 0},
+   {time = 500},
+   {time = 800, a = 255}}})
+  table.insert(skin.destination, 		{id = -110, timer = 41, offset = 55, dst = {
+			{x = -780+geometry.info_position, y = geometry.bga_y, w = geometry.bga_w, h = geometry.bga_h, a = 0}}})
+else
+ table.insert(skin.destination, {id = "bga", filter = 1, dst = {{x =980+geometry.info_position , y = 200, w = geometry.bga_w, h = geometry.bga_h}}})
+ -- table.insert(skin.destination, {id = -101, loop = 400, op = {80, 195}, filter = 1, stretch = 1, dst = {
+ --  {time = 0, x =980+geometry.info_position, y = geometry.bga_y, w = 300,h=300, a = 0},
+ --  {time = 400, a = 255}}})
+ table.insert(skin.destination, {id = "bga_soundonly", stretch = 1, draw = function()
+  if main_state.option(40) or main_state.option(170) then
+   return true
+  end
+ end, timer = 41, loop = 800, dst = {
+  {time = 0, x =-780+geometry.info_position,  y = 200, w = geometry.bga_w, h = geometry.bga_h, a = 0},
+  {time = 500},
+  {time = 800, a = 255}}})
+ table.insert(skin.destination, 		{id = -110, timer = 41, offset = 55, dst = {
+  {x =980+geometry.info_position, y = geometry.bga_y, w = geometry.bga_w, h = geometry.bga_h, a = 0}}})
+ end
 
 --曲情報エリア
 --ここから
@@ -771,7 +775,7 @@ local function main()
   table.insert(skin.destination, {id = "title", filter = 1, dst = {{x = 400, y = 970, w = 575, h = 30}}})
   table.insert(skin.destination, {id = "tablename", filter = 1, dst = {{x = 400, y = 1050, w = 575, h = 26}}})
  else
-  table.insert(skin.destination, {id = "title", filter = 1, dst = {{x = 1230,n, y = 970, w = 575, h = 30}}})
+  table.insert(skin.destination, {id = "title", filter = 1, dst = {{x = 1180, y = 970, w = 575, h = 30}}})
   table.insert(skin.destination, {id = "tablename", filter = 1, dst = {{x = 1230, y = 1050, w = 575, h = 26}}})
  end
 
@@ -791,12 +795,10 @@ local function main()
   table.insert(skin.destination,
   {id = "song-left-s", dst = {
    {x = 780 , y = 30, w = 24, h = 22}}})
-  table.insert(skin.destination,
-  {id = "rate-DnP1", dst = {
-   {x = 765 , y = 30, w = 14, h = 10}}})
-   table.insert(skin.destination,
-   {id = "rate-DnP1", dst = {
-    {x = 765 , y = 50, w = 14, h = 10}}})
+    table.insert(skin.destination,
+    {id = "song-time-colon", dst = {
+     {x = 762 , y = 30, w = 50, h = 50}}})
+    
  else
   table.insert(skin.destination,
   {id = "song-left-m", dst = {
@@ -804,12 +806,9 @@ local function main()
   table.insert(skin.destination,
   {id = "song-left-s", dst = {
    {x = 310, y = 30, w = 24, h = 22}}})
-  table.insert(skin.destination,
-  {id = "rate-DnP1", dst = {
-   {x = 295, y = 30, w = 14, h = 10}}})
    table.insert(skin.destination,
-   {id = "rate-DnP1", dst = {
-    {x = 295, y = 50, w = 14, h = 10}}})
+    {id = "song-time-colon", dst = {
+     {x = 292 , y = 30, w = 50, h = 50}}})
  end
  
 
@@ -1433,7 +1432,7 @@ table.insert(skin.destination,
     {x = 450 + geometry.score_position, y= 30, w = 24, h = 22}}})
    table.insert(skin.destination,
    {id = "rate-DnP1", dst = {
-    {x = 470 + geometry.score_position, y= 30, w = 14, h = 15}}})
+    {x = 475 + geometry.score_position, y= 15, w = 50, h = 50}}})
    table.insert(skin.destination,
    {id = "hispeed-adot-num", dst = {
     {x = 485 + geometry.score_position, y= 30, w = 24, h = 22}}})
@@ -1460,7 +1459,7 @@ table.insert(skin.destination,
 	--レート・小数点以下・ドット、パーセント
 	table.insert(skin.destination,
 	{id = "rate-num", dst = {
-		{x = 720 + geometry.score_position, y= 480, w = 18, h = 24}}})
+		{x = 715 + geometry.score_position, y= 480, w = 18, h = 24}}})
 	table.insert(skin.destination,
 	{id = "rate-adot-num", dst = {
 		{x = 780 + geometry.score_position, y= 480, w = 18, h = 24}}})
@@ -1470,7 +1469,7 @@ table.insert(skin.destination,
     return true
    end
   end, dst = {
-   {x = 765 + geometry.score_position, y= 480, w = 18, h = 24}}})
+   {x = 773 + geometry.score_position, y= 465, w = 50, h = 50}}})
    table.insert(skin.destination,
    {id = "rate-DnP2", draw = function()
     if (main_state.number(101) >= 0) then
@@ -1538,13 +1537,19 @@ table.insert(skin.destination,
 			table.insert(skin.image,
 				{id = id[i], src = "system_src", x = 1500, y= 10 + 28 * (i - 1), w = 110, h = 28})
 			table.insert(skin.imageset,
-				{id = "score-target-tx", ref = 77, images = { id[1], id[2], id[3], id[4], id[5], id[6], id[7], id[8], id[9], id[10], id[11] }})
+				{id = "score-target-tx", ref = 22, images = { id[1], id[2], id[3], id[4], id[5], id[6], id[7], id[8], id[9], id[10], id[11] }})
 		end
 	end
 	--上で定義した奴を配置
+ if is2P() then
 	table.insert(skin.destination,
-	{id = "score-target-tx", dst = {
-		{x = 840 + geometry.score_position, y= 555, w = 110, h = 28}}})
+	{id = "targetname", dst = {
+		{x = 472 + geometry.score_position, y= 555, w = 110, h = 24}}})
+ else
+  table.insert(skin.destination,
+  {id = "targetname", dst = {
+   {x = 840 + geometry.score_position, y= 555, w = 75, h = 22}}})
+ end
 	--ターゲットとの差
 	table.insert(skin.destination,
 	{id = "score-targ-dif", dst = {

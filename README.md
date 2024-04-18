@@ -1,5 +1,5 @@
 # GroundbreakinG Skin (Beta)
-(最終更新 2023/04/20)
+(最終更新 2024/04/19)
 beatoraja用のスキンです。Select/Decide/Play(7Key)/Resultが同封されています。
 
 # スキンの開発について
