@@ -2297,13 +2297,13 @@ local function main()
 	-- 今のBPM
 	table.insert(skin.destination, {
 		id = "BPM-now",
-		dst = { { x = 1270 - geometry.info_position, y = 125, w = 49, h = 56 } }
+		dst = { { x = 1250 - geometry.info_position, y = 125, w = 49, h = 56 } }
 	})
 	-- 最大BPM
 	table.insert(skin.destination, {
 		id = "BPM-max",
 		op = { 177 },
-		dst = { { x = 1470 - geometry.info_position, y = 125, w = 14, h = 18 } }
+		dst = { { x = 1450 - geometry.info_position, y = 125, w = 14, h = 18 } }
 	})
 	-- 最小BPM
 	table.insert(skin.destination, {
