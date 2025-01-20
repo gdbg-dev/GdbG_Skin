@@ -2315,7 +2315,7 @@ local function main()
 	table.insert(skin.destination, {
 		id = "BPM-no-change",
 		op = { 176 },
-		dst = { { x = 1470 - geometry.info_position, y = 125, w = 60, h = 21 } }
+		dst = { { x = 1450 - geometry.info_position, y = 125, w = 60, h = 21 } }
 	})
 	table.insert(skin.destination, {
 		id = "BPM-no-change",
