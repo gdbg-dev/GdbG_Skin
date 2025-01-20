@@ -3443,12 +3443,12 @@ local function main()
 	if is2P() then -- 2P
 		table.insert(skin.destination, {
 			id = "Score-num",
-			dst = { { x = 1450, y = 10, w = 30, h = 43 } }
+			dst = { { x = 1380, y = 10, w = 30, h = 43 } }
 		})
 	else -- 1P
 		table.insert(skin.destination, {
 			id = "Score-num",
-			dst = { { x = 140, y = 10, w = 30, h = 43 } }
+			dst = { { x = 80, y = 10, w = 30, h = 43 } }
 		})
 	end
 
