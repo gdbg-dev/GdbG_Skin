@@ -1642,7 +1642,7 @@ local function main()
 		w = -1,
 		h = -1,
 		angle = 2,
-		range = 853,
+		range = 730,
 		type = 4
 	}
 
