@@ -2236,28 +2236,28 @@ local function main()
 	if is2P() then
 		table.insert(skin.destination, {
 			id = "song-left-m",
-			dst = { { x = 720, y = 30, w = 24, h = 22 } }
+			dst = { { x = 740, y = 30, w = 24, h = 22 } }
 		})
 		table.insert(skin.destination, {
 			id = "song-left-s",
-			dst = { { x = 780, y = 30, w = 24, h = 22 } }
+			dst = { { x = 800, y = 30, w = 24, h = 22 } }
 		})
 		table.insert(skin.destination, {
 			id = "song-time-colon",
-			dst = { { x = 762, y = 30, w = 50, h = 50 } }
+			dst = { { x = 782, y = 30, w = 50, h = 50 } }
 		})
 	else
 		table.insert(skin.destination, {
 			id = "song-left-m",
-			dst = { { x = 250, y = 30, w = 24, h = 22 } }
+			dst = { { x = 260, y = 30, w = 24, h = 22 } }
 		})
 		table.insert(skin.destination, {
 			id = "song-left-s",
-			dst = { { x = 310, y = 30, w = 24, h = 22 } }
+			dst = { { x = 320, y = 30, w = 24, h = 22 } }
 		})
 		table.insert(skin.destination, {
 			id = "song-time-colon",
-			dst = { { x = 292, y = 30, w = 50, h = 50 } }
+			dst = { { x = 302, y = 30, w = 50, h = 50 } }
 		})
 	end
 
@@ -3345,32 +3345,32 @@ local function main()
 	if is2P() then -- 2P
 		table.insert(skin.destination, {
 			id = "gauge-num",
-			dst = { { x = 60 + geometry.play_position, y = 130, w = 29, h = 36 } }
+			dst = { { x = 60 + geometry.play_position, y = 120, w = 29, h = 36 } }
 		})
 		-- 小数点以下
 		table.insert(skin.destination, {
 			id = "gauge-adot-num",
-			dst = { { x = 171 + geometry.play_position, y = 130, w = 29, h = 36 } }
+			dst = { { x = 171 + geometry.play_position, y = 120, w = 29, h = 36 } }
 		})
 		-- 小数点とパーセント
 		table.insert(skin.destination, {
 			id = "gauge-DnP",
-			dst = { { x = 151 + geometry.play_position, y = 130, w = 79, h = 36 } }
+			dst = { { x = 151 + geometry.play_position, y = 120, w = 79, h = 36 } }
 		})
 	else -- 1P
 		table.insert(skin.destination, {
 			id = "gauge-num",
-			dst = { { x = 410 + geometry.play_position, y = 130, w = 29, h = 36 } }
+			dst = { { x = 420 + geometry.play_position, y = 120, w = 29, h = 36 } }
 		})
 		-- 小数点以下
 		table.insert(skin.destination, {
 			id = "gauge-adot-num",
-			dst = { { x = 521 + geometry.play_position, y = 130, w = 29, h = 36 } }
+			dst = { { x = 521 + geometry.play_position, y = 120, w = 29, h = 36 } }
 		})
 		-- 小数点とパーセント
 		table.insert(skin.destination, {
 			id = "gauge-DnP",
-			dst = { { x = 506 + geometry.play_position, y = 130, w = 79, h = 36 } }
+			dst = { { x = 506 + geometry.play_position, y = 120, w = 79, h = 36 } }
 		})
 	end
 
