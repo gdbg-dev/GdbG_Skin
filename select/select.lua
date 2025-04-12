@@ -13,7 +13,7 @@
 -- // limitations under the License.
 local header = {
 	type = 5,
-	name = "GroundbreakinG Skin Ver.0.1 Select",
+	name = "GroundbreakinG Skin Ver.2024 Select",
 	w = 1920,
 	h = 1080,
 	fadeout = 500,
@@ -1937,7 +1937,7 @@ local function main()
 			op = { 23 },
 			timer = 23,
 			dst = {
-				{ time = 0,   x = 790, y = -255, w = 260, h = 740, a = 0 },
+				{ time = 0,   x = 790, y = -305, w = 260, h = 740, a = 0 },
 				{ time = 300, a = 255 }
 			}
 		},
@@ -1947,7 +1947,7 @@ local function main()
 			op = { -23 },
 			timer = 33,
 			dst = {
-				{ time = 0,   x = 790, y = -255, w = 260, h = 740, a = 255 },
+				{ time = 0,   x = 790, y = -305, w = 260, h = 740, a = 255 },
 				{ time = 300, a = 0 }
 			}
 		},
