@@ -1,0 +1,25 @@
+return function()
+	return {
+		{id = "bg_src", path = "backgrounds.png"},
+		{id = "button", path = "parts/system/button.png"},
+		{id = "bar", path = "parts/system/song-bar.png"},
+		{id = "system_src", path = "parts/system/system.png"},
+		{id = "score_head", path = "parts/system/score_head.png"},
+		{id = "time-hispeed", path = "parts/system/timehispeed.png"},
+		{id = "BPM-bar", path = "parts/system/bpmbar.png"},
+		{id = "graph-grid", path = "parts/system/graphgrid.png"},
+		{id = "soundonly_src", path = "common/sound only/*.png"},
+		{id = "nostagefile_src", path = "common/stagefile/*.png"},
+		{id = "failedbg", path = "parts/failed.png"},
+		{id = "notes_src", path = "parts/notes/*.png"},
+		{id = "judge_src", path = "parts/judge/*.png"},
+		{id = "keybeam_src", path = "parts/keybeam/*.png"},
+		{id = "bomb_src", path = "parts/bomb/*.png"},
+		{id = "lanecover_src", path = "parts/lanecover/*.png"},
+		{id = "liftcover_src", path = "parts/liftcover/*.png"},
+		{id = "hiddencover_src", path = "parts/hiddencover/*.png"},
+		{id = "p_icon_src", path = "common/player info/icon/*.png"},
+		{id = "p_color_src", path = "common/player info/lamp color/*.png"},
+		{id = "p_free_src", path = "common/player info/freespace/*.png"},
+	}
+end

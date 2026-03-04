@@ -22,146 +22,132 @@ local header = {
 	input = 500,
 }
 
-local function main()
- -- ヘッダ情報コピー
- local skin = {}
- for k, v in pairs(header) do
-     skin[k] = v
- end
+local function append_difficulty_images(images, difficulties)
+	for i, difficulty in ipairs(difficulties) do
+		table.insert(images, {
+			id = difficulty.id,
+			src = 3,
+			x = 0,
+			y = 744 + (i - 1) * 60,
+			w = 450,
+			h = 60
+		})
+	end
+end
 
-skin.source = {
-  {id = 0, path = "back1.png"},
+local function append_difficulty_values(values, difficulties)
+	for i, difficulty in ipairs(difficulties) do
+		table.insert(values, {
+			id = "n_" .. difficulty.id,
+			src = 3,
+			x = 0,
+			y = (i - 1) * 124,
+			w = 950,
+			h = 124,
+			ref = 96,
+			divx = 10,
+			digit = 2,
+			align = 2
+		})
+	end
+end
+
+local function append_difficulty_destinations(destinations, difficulties)
+	for _, difficulty in ipairs(difficulties) do
+		table.insert(destinations, {
+			id = difficulty.id,
+			op = {difficulty.op},
+			dst = {
+				{time = 0, x = 820, y = 890, w = 320, h = 60, a = 0},
+				{time = 1500, x = 820, y = 940, w = 320, h = 60, a = 255},
+				{time = 3500, x = 820, y = 890, w = 320, h = 60, a = 255}
+			}
+		})
+		table.insert(destinations, {
+			id = "n_" .. difficulty.id,
+			op = {difficulty.op},
+			dst = {
+				{time = 0, x = 1200, y = 1150, w = 95, h = 124, a = 0},
+				{time = 1500, x = 1200, y = 1150, w = 95, h = 124, a = 255},
+				{time = 3500, x = 1200, y = 1150, w = 95, h = 124, a = 255}
+			}
+		})
+	end
+end
+
+local function main()
+	-- ヘッダ情報コピー
+	local skin = {}
+	for k, v in pairs(header) do
+		skin[k] = v
+	end
+
+	local difficulties = {
+		{id = "beginner", op = 151},
+		{id = "normal", op = 152},
+		{id = "hyper", op = 153},
+		{id = "another", op = 154},
+		{id = "insane", op = 155},
+		{id = "unknown", op = 150}
+	}
+
+	skin.source = {
+		{id = 0, path = "back1.png"},
 		{id = 1, path = "back2.png"},
 		{id = 2, path = "logo 1.png"},
-		{id = 3, path = "parts.png"}
-}
+		{id = 3, path = "parts.png"},
+	}
 
- skin.font =  {
-  {id = 0, path = "../fonts/LINESeedJP_TTF_Bd.ttf"},
-  {id = 1, path = "../fonts/bitmap/Title.fnt"},
-  {id = 2, path = "../fonts/bitmap/Artist.fnt"}
- }
- 
- skin.text = {
-  {id = "genre", font = 1, size = -48, overflow = 1, align = 1, ref = 13},
-  {id = "table", font = 1, size = -58, ref = 1003, overflow = 1, align = 1},
-  {id = "title", font = 1, size = -118, ref = 10, overflow = 1, align = 1},
-  {id = "fulltitle", font = 1, size = -58, ref = 12, overflow = 1, align = 1},
-  {id = "artist", font = 1, size = -58, ref = 14, overflow = 1, align = 1}
-  }
+	skin.font = {
+		{id = 0, path = "../fonts/LINESeedJP_TTF_Bd.ttf"},
+		{id = 1, path = "../fonts/bitmap/Title.fnt"},
+		{id = 2, path = "../fonts/bitmap/Artist.fnt"},
+	}
 
- skin.image =  {
-  {id = "bg1", src = 0, x = 0, y = 0, w = 1920, h = 1080},
-  {id = "bg2", src = 1, x = 0, y = 0, w = 1920, h = 1080},
-  {id = "logo", src = 2, x = 0, y = 0, w = 1036, h = 1074},
-  {id =  "beginner", src =  3, x = 0,  y = 744,  w = 450, h = 60},
-		{id =  "normal", src =  3, x = 0,  y = 804,  w = 450,  h = 60},
-		{id =  "hyper", src =  3, x = 0,  y = 864,  w = 450,  h = 60},
-		{id =  "another", src =  3, x = 0,  y = 924,  w = 450,  h = 60},
-		{id =  "insane", src =  3, x = 0,  y = 984,  w = 450,  h = 60},
-		{id =  "unknown", src =  3, x = 0,  y = 1044,  w = 450,  h = 60}
- 	}
+	skin.text = {
+		{id = "genre", font = 1, size = -48, overflow = 1, align = 1, ref = 13},
+		{id = "table", font = 1, size = -58, ref = 1003, overflow = 1, align = 1},
+		{id = "title", font = 1, size = -118, ref = 10, overflow = 1, align = 1},
+		{id = "fulltitle", font = 1, size = -58, ref = 12, overflow = 1, align = 1},
+		{id = "artist", font = 1, size = -58, ref = 14, overflow = 1, align = 1},
+	}
 
- skin.value = {
-  {id =  "n_beginner", src =  3, x = 0,  y = 0,  w = 950, h = 124, ref = 96, divx = 10, digit = 2, align = 2},
-		{id =  "n_normal", src =  3, x = 0,  y = 124,w = 950, h = 124, ref = 96, divx = 10, align = 2, digit = 2},
-		{id =  "n_hyper", src =  3, x = 0,  y = 248,  w = 950, h = 124, ref = 96, divx = 10, digit = 2, align = 2},
-		{id =  "n_another", src =  3, x = 0,  y = 372,w = 950,h = 124, ref = 96, divx = 10, digit = 2, align = 2},
-		{id =  "n_insane", src =  3, x = 0,  y = 496, w = 950, h = 124, ref = 96, divx = 10, digit = 2, align = 2},
-		{id =  "n_unknown", src =  3, x = 0,  y = 620,  w = 950,h = 124, ref = 96, divx = 10, digit = 2, align = 2}
-  }
+	skin.image = {
+		{id = "bg1", src = 0, x = 0, y = 0, w = 1920, h = 1080},
+		{id = "bg2", src = 1, x = 0, y = 0, w = 1920, h = 1080},
+		{id = "logo", src = 2, x = 0, y = 0, w = 1036, h = 1074},
+	}
+	append_difficulty_images(skin.image, difficulties)
 
- skin.destination = {
-		{id = "bg1", dst = {
-			{x = 0, y = 0, w = 1920, h = 1080}
+	skin.value = {}
+	append_difficulty_values(skin.value, difficulties)
+
+	skin.destination = {
+		{id = "bg1", dst = {{x = 0, y = 0, w = 1920, h = 1080}}},
+		{id = "bg2", dst = {{x = 0, y = 0, w = 1920, h = 1080, a = 80}}},
+		{id = "logo", dst = {{x = 785, y = 250, w = 1036, h = 1074, a = 190}}},
+		{id = "genre", dst = {
+			{time = 0, x = 960, y = 450, w = 1300, h = 58, a = 0},
+			{time = 1500, x = 960, y = 500, w = 1300, h = 58, a = 255},
+			{time = 3500, x = 960, y = 450, w = 1300, h = 58, a = 255},
 		}},
-  {id = "bg2", dst = {
-			{x = 0, y = 0, w = 1920, h = 1080, a = 80}
+		{id = "title", dst = {
+			{time = 0, acc = 1, x = 960, y = 900, w = 1720, h = 40, a = 0},
+			{time = 1500, acc = 1, x = 960, y = 950, w = 1720, h = 40, a = 255},
+			{time = 3500, acc = 1, x = 960, y = 900, w = 1720, h = 40, a = 255},
 		}},
-  {id = "logo", dst = {
-			{x = 785, y = 250, w = 1036, h = 1074, a = 190}
+		{id = "artist", dst = {
+			{time = 0, acc = 1, x = 960, y = 650, w = 1720, h = 40, a = 0},
+			{time = 1500, acc = 1, x = 960, y = 700, w = 1720, h = 40, a = 255},
+			{time = 3500, acc = 1, x = 960, y = 650, w = 1720, h = 40, a = 255},
 		}},
-  {id = "genre", dst = {
-   {time = 0, x = 960, y = 450,w = 1300, h = 58, a = 0},
-   {time = 1500,x = 960, y = 500,w = 1300, h = 58, a = 255},
-   {time = 3500,  x = 960, y = 450,w = 1300, h = 58, a = 255} 
-   }},
-  {id = "title",  dst = {
-   {time = 0,acc = 1,x = 960, y = 900, w = 1720, h = 40, a = 0},
-   {time = 1500,acc = 1,x = 960, y = 950, w = 1720, h = 40, a = 255},
-   {time = 3500,acc = 1,x = 960, y = 900, w = 1720, h = 40, a = 255}
-   }},
-		{id = "artist",  dst = {
-   {time = 0,acc = 1,x = 960, y = 650, w = 1720, h = 40, a = 0},
-   {time = 1500,acc = 1,x = 960, y = 700, w = 1720, h = 40, a = 255},
-   {time = 3500,acc = 1,x = 960, y = 650, w = 1720, h = 40, a = 255}
-   }},
-  {id =  "beginner", op = {151}, dst = {
-   {time = 0,x = 820, y = 890,  w = 320, h = 60, a = 0},
-   {time = 1500,x = 820,y = 940,  w = 320, h = 60, a = 255},
-   {time = 3500,x = 820, y = 890,  w = 320, h = 60, a = 255}
-   }},
-		{id =  "normal", op = {152}, dst = {
-   {time = 0,x = 820, y = 890,  w = 320, h = 60, a = 0},
-   {time = 1500,x = 820,y = 940,  w = 320, h = 60, a = 255},
-   {time = 3500,x = 820, y = 890,  w = 320, h = 60, a = 255}
-   }},
-		{id =  "hyper", op = {153}, dst = {
-   {time = 0,x = 820, y = 890,  w = 320, h = 60, a = 0},
-   {time = 1500,x = 820,y = 940,  w = 320, h = 60, a = 255},
-   {time = 3500,x = 820, y = 890,  w = 320, h = 60, a = 255}
-   }},
-		{id =  "another", op = {154}, dst = {
-   {time = 0,x = 820, y = 890,  w = 320, h = 60, a = 0},
-   {time = 1500,x = 820,y = 940,  w = 320, h = 60, a = 255},
-   {time = 3500,x = 820, y = 890,  w = 320, h = 60, a = 255}
-   }},
-		{id =  "insane", op = {155}, dst = {
-   {time = 0,x = 820, y = 890,  w = 320, h = 60, a = 0},
-   {time = 1500,x = 820,y = 940,  w = 320, h = 60, a = 255},
-   {time = 3500,x = 820, y = 890,  w = 320, h = 60, a = 255}
-   }},
-		{id =  "unknown", op = {150}, dst = {
-   {time = 0,x = 820, y = 890,  w = 320, h = 60, a = 0},
-   {time = 1500,x = 820,y = 940,  w = 320, h = 60, a = 255},
-   {time = 3500,x = 820, y = 890,  w = 320, h = 60, a = 255}
-   }},
-  {id =  "n_beginner", op = {151}, dst = {
-   {time = 0,x = 1200,  y = 1150,  w = 95,  h = 124, a = 0},
-   {time = 1500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255},
-   {time = 3500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255}
-   }},
-		{id =  "n_normal", op = {152}, dst = {
-   {time = 0,x = 1200,  y = 1150,  w = 95,  h = 124, a = 0 },
-   {time = 1500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255},
-   {time = 3500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255}
-   }},
-		{id =  "n_hyper", op = {153}, dst = {
-   {time = 0,x = 1200,  y = 1150,  w = 95,  h = 124, a = 0},
-   {time = 1500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255},
-   {time = 3500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255}
-   }},
-		{id =  "n_another", op = {154}, dst = {
-   {time = 0,x = 1200,  y = 1150,  w = 95,  h = 124, a = 0},
-   {time = 1500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255},
-   {time = 3500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255}
-   }},
-		{id =  "n_insane", op = {155}, dst = {
-   {time = 0,x = 1200,  y = 1150,  w = 95,  h = 124, a = 0},
-   {time = 1500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255},
-   {time = 3500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255}
-   }},
-		{id =  "n_unknown", op = {150}, dst = {
-   {time = 0,x = 1200,  y = 1150,  w = 95,  h = 124, a = 0},
-   {time = 1500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255},
-   {time = 3500,x = 1200,  y = 1150,  w = 95,  h = 124, a = 255}
-   }},
- }
+	}
+	append_difficulty_destinations(skin.destination, difficulties)
 
-return skin
+	return skin
 end
 
 return {
-    header = header,
-    main = main
+	header = header,
+	main = main,
 }

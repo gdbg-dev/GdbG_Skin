@@ -12,7 +12,13 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-main_state = require("main_state")
+local main_state = require("main_state")
+local layout = require("layout")
+local build_sources = require("sources")
+local build_images = require("images")
+local build_values = require("values")
+local build_text = require("text")
+local destinations = require("destinations")
 
 
 local category = {
@@ -25,7 +31,7 @@ local category = {
 	{name = "プレイ", item = {
 		"play_1",
 		"play_2",
-  "play_3",
+		"play_3",
 		"play_4",
 		"play_16",
 		"play_17",
@@ -90,25 +96,26 @@ local function plays_2P_side()
 	end
 	return value
 end
+
 local function f_gaugewidth()
 	local value = 0
 	local index = skin_config.option["プレイエリア"]
 	if index == 902 then -- 正常
 		value = 0
-	elseif index == 906  then -- 2P
+	elseif index == 906 then -- 2P
 		value = -350
 	else
 		value = 1280
 	end
 	return value
 end
-	
+
 local function f_score_pos()
 	local value = 0
 	local index = skin_config.option["プレイエリア"]
 	if index == 902 then
 		value = 0
-	elseif index == 906  then
+	elseif index == 906 then
 		value = 480
 	else
 		value = 1280
@@ -121,7 +128,7 @@ local function f_info_pos()
 	local index = skin_config.option["プレイエリア"]
 	if index == 902 then
 		value = 0
-	elseif index == 906  then
+	elseif index == 906 then
 		value = 910
 	else
 		value = 1280
@@ -139,6 +146,7 @@ end
 local function isFastSlowOn()
 	return skin_config.option["Fast/Slow"] == 916
 end
+
 local function isFastSlowMS()
 	return skin_config.option["Fast/Slow"] == 926
 end
@@ -184,362 +192,31 @@ local header = {
 
 
 local function main()
-
-	local skin = {}
-	for k, v in pairs(header) do
-		skin[k] = v
-	end
-
+	local skin = layout.copy_header(header)
 
 	local c_play_pos = plays_2P_side()
 	local c_score_pos = f_score_pos()
 	local c_info_pos = f_info_pos()
- local c_info_gwidth = f_gaugewidth()
+	local c_info_gwidth = f_gaugewidth()
+	local geometry, notesInfo = layout.build_geometry({
+		play_position = c_play_pos,
+		score_position = c_score_pos,
+		gauge_width = c_info_gwidth,
+		info_position = c_info_pos,
+		is_scratch_right = isScratchRight(),
+	})
 
- local geometry = {}
-	geometry.play_position = c_play_pos
-	geometry.score_position = c_score_pos
- geometry.gauge_width = c_info_gwidth
-	geometry.info_position = c_info_pos
-	geometry.lane_x = 60
-	geometry.lane_y = 350
-	geometry.lane_w = 519
-	geometry.lane_h = 853
-	geometry.lane_line_width = 3
-	geometry.lane_line_src = 900
-	geometry.judge_x = 140
-	geometry.judge_y = 430
-	geometry.bga_y = 510
-	geometry.bga_w = 800
-	geometry.bga_h = 650
-
-
-	local notesInfo = {
-		height = 12,
-		Wh_width = 60,
-		Bl_width = 48,
-		Sc_width = 108,
-		Wh_x = 216,
-		Bl_x = 276,
-		Ye_x = 276,
-		Sc_x = 108,
-		As_x = 0,
-		Std_y = 12,
-		lnEn_y = 48,
-		lnSt_y = 84,
-		lnAc_y = 168,
-		lnBo_y = 120,
-		hcEn_y = 228,
-		hcSt_y = 264,
-		hcBo_y = 120,
-		hcAc_y = 300,
-		hcDm_y = 300,
-		hcRe_y = 336,
-
-		lnCycle = 200,
-		hcnCycle = 200,
-		hcnDamageCycle = 100,
-
-		mine_y = 372,
-	}
-
-	if isScratchRight() then
-		geometry.lane_line_src = 950
-	end
-
-	skin.source = {
-		{id = "bg_src", path = "backgrounds.png"},
-  {id = "button", path = "parts/system/button.png"},
-  {id = "bar", path = "parts/system/song-bar.png"},
-		{id = "system_src", path = "parts/system/system.png"},
-  {id = "score_head", path = "parts/system/score_head.png"},
-  {id = "time-hispeed", path = "parts/system/timehispeed.png"},
-  {id = "BPM-bar", path = "parts/system/bpmbar.png"},
-  {id = "graph-grid", path = "parts/system/graphgrid.png"},
-		{id = "soundonly_src", path = "common/sound only/*.png"},
-		{id = "nostagefile_src", path = "common/stagefile/*.png"},
-  {id = "failedbg", path = "parts/failed.png"},
-		{id = "notes_src", path = "parts/notes/*.png"},
-		{id = "judge_src", path = "parts/judge/*.png"},
-		{id = "keybeam_src", path = "parts/keybeam/*.png"},
-		{id = "bomb_src", path = "parts/bomb/*.png"},
-		{id = "lanecover_src", path = "parts/lanecover/*.png"},
-		{id = "liftcover_src", path = "parts/liftcover/*.png"},
-		{id = "hiddencover_src", path = "parts/hiddencover/*.png"},
-
-		{id = "p_icon_src", path = "common/player info/icon/*.png"},
-		{id = "p_color_src", path = "common/player info/lamp color/*.png"},
-		{id = "p_free_src", path = "common/player info/freespace/*.png"}
-
-
-	}
+	skin.source = build_sources()
 
 	skin.font = {
 		{id = 0, path = "font/Mplus1p-Medium.ttf"},
 		{id = 1, path = "font/Mplus1p-ExtraBold.ttf"},
 	}
 
-	skin.image = {
-		{id = "bg", src = "bg_src", x = 0, y = 0, w = 1920, h = 1080},
-  {id = "failedbg", src = "failedbg", x = 0, y = 0, w = 1920, h = 1080},
-		{id = "bga_soundonly", src = "soundonly_src", x = 0, y = 0, w = -1, h = -1},
-		{id = "head-line", src = "system_src", x = 622, y = 180, w = 250, h = 3},
-
-
-		{id = "lanes", src = "system_src", x = 0, y = 0, w = 519, h = 856},
-		{id = "lanes_line", src = "system_src", x = 3, y = geometry.lane_line_src, w = 513, h = 10},
-  {id = "lanes_button", src = "button", x = 0, y = 0 , w = 500, h = 100},
-  {id = "lanes_button_2P", src = "button", x = 0, y = 150 , w = 500, h = 100},
-
-		{id = "lamp_green_v", src = "system_src", x = 660, y = 350, w = 6, h = 14},
-		{id = "lamp_duration_v", src = "system_src", x = 670, y = 350, w = 6, h = 14},
-
-		{id = "fast", src = "system_src", x = 33, y = 300, w = 70, h = 19},
-		{id = "slow", src = "system_src", x = 1500, y = 350, w = 70, h = 19},
-		{id = "fast-lamp", src = "system_src", x = 1500, y = 330, w = 14, h = 19},
-		{id = "slow-lamp", src = "system_src", x = 1500, y = 350, w = 14, h = 19},
-		{id = "l-rate-DnP", src = "system_src", x = 635, y = 1166, w = 56, h = 18},
-
-		{id = "lamp_music_end", src = "system_src", x = 1350, y = 770, w = 20, h = 40},
-		{id = "music_end", src = "system_src", x = 1370, y = 770, w = 130, h = 40},
-
-		{id = "autoplay_tx", src = "system_src", x = 1370, y = 810, w = 250, h = 50},
-		{id = "lamp_replay", src = "system_src", x = 1350, y = 860, w = 20, h = 50},
-		{id = "replay_tx", src = "system_src", x = 1370, y = 860, w = 160, h = 50},
-
-
-		{id = "playoption_frame", src = "system_src", x = 900, y = 117, w = 560, h = 179},
-
-		{id = "gauge-DnP", src = "system_src", x = 390, y = 1127, w = 79, h = 36},
-		{id = "rate-DnP1", src = "system_src", x = 408, y = 1452, w = 50, h = 50},
-  {id = "rate-DnP2", src = "system_src", x = 435, y = 1452, w = 94, h = 37},
-
-
-		{id = "score-lamp", src = "system_src", x = 600, y = 120, w = 12, h = 60},
-		{id = "score-head", src = "score_head", x = 0, y = 0, w = 223, h = 120},
-  {id = "notes-head", src = "system_src", x = 1380, y = 750, w = 95, h = 21},
-		{id = "lamp-scores", src = "system_src", x = 600, y = 420, w = 10, h = 110},
-		{id = "score-mybest-tx", src = "system_src", x = 620, y = 425, w = 83, h = 28},
-		{id = "scoregraph-grid", src = "graph-grid", x = 0, y = 0, w = 237, h = 211},
-		{id = "graph-best-fp", src = "system_src", x = 615, y = 360, w = 5, h = 20},
-		{id = "score-best-fp", src = "system_src", x = 680, y = 340, w = 217, h = 47},
-
-
-
-
-
-
-
-		{id = "songtitle_line", src = "system_src", x = 600, y = 100, w = 610, h = 3},
-		{id = "songinfo_frame", src = "system_src", x = 800 + 15, y = 10, w = 500 - 15, h = 64 + 12},
-		---後々SP5の方は消す
-		{id = "songinfo_sp5", src = "system_src", x = 1340, y = 5, w = 80, h = 52},
-		{id = "songinfo_sp7", src = "system_src", x = 1340, y = 60, w = 80, h = 52},
-		{id = "sp5_lanecover", src = "system_src", x = 2000, y = 0, w = 114, h = 850},
-	
-
-		{id = "songinfo_lamp", src = "system_src", x = 1080, y = 1010, w = 373, h = 36},
-		{id = "load-titleline", src = "system_src", x = 530, y = 0, w = 1450, h = 3},
-		{id = "load-nostagefile", src = "nostagefile_src", x = 0, y = 0, w = -1, h = -1},
-
-
-		{id = "BPM-lamp", src = "system_src", x = 600, y = 280, w = 12, h = 60},
-		{id = "BPM-head", src = "system_src", x = 622, y = 280, w = 250, h = 60},
-		{id = "BPM-bar", src = "BPM-bar", x = 0, y = 0, w = 1027, h =39},
-		{id = "BPM-no-change", src = "system_src", x = 1307, y = 300, w = 80, h = 41},
-		{id = "song-time-colon", src = "system_src", x = 0, y = 1400, w = 100, h = 100},
-		{id = "song-progress-bar", src = "bar", x = 0, y = 0, w = 70, h = 1080},
-
-		{id = "failed", src = "system_src", x = 1000, y = 1050, w = 440, h = 120},
-		{id = "lamp_failed", src = "system_src", x = 950, y = 1050, w = 50, h = 120},
-		{id = "fc_glow", src = "system_src", x = 950, y = 1200, w = 513, h = 35},
-		{id = "fc_text", src = "system_src", x = 1024, y = 1250, w = 439, h = 60},
-		{id = "fc_lamp", src = "system_src", x = 950, y = 1250, w = 74, h = 60},
-
-
-		{id = "timehispeed", src = "time-hispeed", x = 0, y = 0, w = 280, h = 15},
-		{id = "player-icon", src = "p_icon_src", x = 0, y = 0, w = -1, h = -1},
-		{id = "lamp-player", src = "p_color_src", x = 0, y = 0, w = -1, h = -1},
-		{id = "player-freespace", src = "p_free_src", x = 0, y = 0, w = -1, h = -1},
-		{id = "player-line", src = "system_src", x = 1090, y = 980, w = 335, h = 3},
-
-		{id = "judge-pg", src = "judge_src", x = 0, y = 0, w = 191, h = 189, divy = 3, cycle = 120},
-		{id = "judge-gr", src = "judge_src", x = 0, y = 122, w = 191, h = 122, divy = 2, cycle = 80},
-		{id = "judge-gd", src = "judge_src", x = 0, y = 270, w = 382, h = 61, divx = 2, cycle = 80},
-		{id = "judge-bd", src = "judge_src", x = 0, y = 311, w = 382, h = 61, divx = 2, cycle = 80},
-		{id = "judge-pr", src = "judge_src", x = 0, y = 440, w = 382, h = 61, divx = 2, cycle = 80},
-		{id = "judge-ms", src = "judge_src", x = 0, y = 560, w = 382, h = 61, divx = 2, cycle = 80},
-
-		{id = "keybeam-w", src = "keybeam_src", x = 0, y = 0, w = 50, h = 853},
-		{id = "keybeam-b", src = "keybeam_src", x = 50, y = 0, w = 50, h = 853},
-		{id = "keybeam-s", src = "keybeam_src", x = 100, y = 0, w = 50, h = 853},
-
-		{id = "note-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.Std_y, w = notesInfo.Bl_width, h = notesInfo.height},
-		{id = "note-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.Std_y, w = notesInfo.Wh_width, h = notesInfo.height},
-		{id = "note-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.Std_y, w = notesInfo.Sc_width, h = notesInfo.height},
-		{id = "note-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.Std_y, w = notesInfo.Bl_width, h = notesInfo.height},
-
-		{id = "lnSt-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.lnSt_y, w = notesInfo.Bl_width, h = notesInfo.height},
-		{id = "lnSt-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.lnSt_y, w = notesInfo.Wh_width, h = notesInfo.height},
-		{id = "lnSt-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.lnSt_y, w = notesInfo.Sc_width, h = notesInfo.height},
-		{id = "lnSt-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.lnSt_y, w = notesInfo.Bl_width, h = notesInfo.height},
-
-
-		{id = "lnEn-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.lnEn_y, w = notesInfo.Bl_width, h = notesInfo.height},
-		{id = "lnEn-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.lnEn_y, w = notesInfo.Wh_width, h = notesInfo.height},
-		{id = "lnEn-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.lnEn_y, w = notesInfo.Sc_width, h = notesInfo.height},
-		{id = "lnEn-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.lnEn_y, w = notesInfo.Bl_width, h = notesInfo.height},
-
-		{id = "lnBo-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.lnAc_y, w = notesInfo.Bl_width, h = notesInfo.height * 2, divy = 2, cycle = notesInfo.lnCycle},
-		{id = "lnBo-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.lnAc_y, w = notesInfo.Wh_width, h = notesInfo.height * 2, divy = 2, cycle = notesInfo.lnCycle},
-		{id = "lnBo-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.lnAc_y, w = notesInfo.Sc_width, h = notesInfo.height * 2, divy = 2, cycle = notesInfo.lnCycle},
-		{id = "lnBo-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.lnAc_y, w = notesInfo.Bl_width, h = notesInfo.height * 2, divy = 2, cycle = notesInfo.lnCycle},
-
-		{id = "lnAc-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.lnBo_y, w = notesInfo.Bl_width, h = notesInfo.height},
-		{id = "lnAc-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.lnBo_y, w = notesInfo.Wh_width, h = notesInfo.height},
-		{id = "lnAc-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.lnBo_y, w = notesInfo.Sc_width, h = notesInfo.height},
-		{id = "lnAc-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.lnBo_y, w = notesInfo.Bl_width, h = notesInfo.height},
-
-		{id = "hcSt-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.hcSt_y, w = notesInfo.Bl_width, h = notesInfo.height},
-		{id = "hcSt-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.hcSt_y, w = notesInfo.Wh_width, h = notesInfo.height},
-		{id = "hcSt-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.hcSt_y, w = notesInfo.Sc_width, h = notesInfo.height},
-		{id = "hcSt-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.hcSt_y, w = notesInfo.Bl_width, h = notesInfo.height},
-
-		{id = "hcEn-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.hcEn_y, w = notesInfo.Bl_width, h = notesInfo.height},
-		{id = "hcEn-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.hcEn_y, w = notesInfo.Wh_width, h = notesInfo.height},
-		{id = "hcEn-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.hcEn_y, w = notesInfo.Sc_width, h = notesInfo.height},
-		{id = "hcEn-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.hcEn_y, w = notesInfo.Bl_width, h = notesInfo.height},
-
-		{id = "hcAc-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.hcBo_y, w = notesInfo.Bl_width, h = notesInfo.height},
-		{id = "hcAc-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.hcBo_y, w = notesInfo.Wh_width, h = notesInfo.height},
-		{id = "hcAc-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.hcBo_y, w = notesInfo.Sc_width, h = notesInfo.height},
-		{id = "hcAc-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.hcBo_y, w = notesInfo.Ye_width, h = notesInfo.height},
-
-		{id = "hcBo-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.hcAc_y, w = notesInfo.Bl_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnCycle},
-		{id = "hcBo-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.hcAc_y, w = notesInfo.Wh_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnCycle},
-		{id = "hcBo-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.hcAc_y, w = notesInfo.Sc_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnCycle},
-		{id = "hcBo-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.hcAc_y, w = notesInfo.Ye_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnCycle},
-
-		{id = "hcDm-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.hcDm_y, w = notesInfo.Bl_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnCycle},
-		{id = "hcDm-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.hcDm_y, w = notesInfo.Wh_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnCycle},
-		{id = "hcDm-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.hcDm_y, w = notesInfo.Sc_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnCycle},
-		{id = "hcDm-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.hcDm_y, w = notesInfo.Ye_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnCycle},
-
-		{id = "hcRe-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.hcRe_y, w = notesInfo.Bl_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnDamageCycle},
-		{id = "hcRe-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.hcRe_y, w = notesInfo.Wh_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnDamageCycle},
-		{id = "hcRe-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.hcRe_y, w = notesInfo.Sc_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnDamageCycle},
-		{id = "hcRe-Ye", src = "notes_src", x = notesInfo.Ye_x, y = notesInfo.hcRe_y, w = notesInfo.Ye_width, h = notesInfo.height, divy = 2, cycle = notesInfo.hcnDamageCycle},
-
-		{id = "mine-Bl", src = "notes_src", x = notesInfo.Bl_x, y = notesInfo.mine_y, w = notesInfo.Bl_width, h = notesInfo.height},
-		{id = "mine-Wh", src = "notes_src", x = notesInfo.Wh_x, y = notesInfo.mine_y, w = notesInfo.Wh_width, h = notesInfo.height},
-		{id = "mine-Sc", src = "notes_src", x = notesInfo.Sc_x, y = notesInfo.mine_y, w = notesInfo.Sc_width, h = notesInfo.height},
-
-		{id = "section-line", src = "system_src", x = 0, y = 0, w = 1, h = 1},
-
-		{id = "gauge-r1", src = "system_src", x = 900, y = 1000, w = 2, h = 23},
-		{id = "gauge-r2", src = "system_src", x = 910, y = 1000, w = 2, h = 23},
-		{id = "gauge-r3", src = "system_src", x = 900, y = 1000, w = 2, h = 23},
-
-		{id = "gauge-b1", src = "system_src", x = 905, y = 1000, w = 2, h = 23},
-		{id = "gauge-b2", src = "system_src", x = 915, y = 1000, w = 2, h = 23},
-		{id = "gauge-b3", src = "system_src", x = 905, y = 1000, w = 2, h = 23},
-
-		{id = "gauge-y1", src = "system_src", x = 900, y = 1025, w = 2, h = 23},
-		{id = "gauge-y2", src = "system_src", x = 910, y = 1025, w = 2, h = 23},
-		{id = "gauge-y3", src = "system_src", x = 900, y = 1025, w = 2, h = 23},
-
-		{id = "gauge-p1", src = "system_src", x = 900, y = 1025, w = 2, h = 23},
-		{id = "gauge-p2", src = "system_src", x = 905, y = 1025, w = 2, h = 23},
-		{id = "gauge-p3", src = "system_src", x = 905, y = 1025, w = 2, h = 23},
-
-		{id = "gauge-g1", src = "system_src", x = 925, y = 1000, w = 2, h = 23},
-		{id = "gauge-g2", src = "system_src", x = 935, y = 1000, w = 2, h = 23},
-		{id = "gauge-g3", src = "system_src", x = 925, y = 1000, w = 2, h = 23},
-
-		{id = "gauge-w1", src = "system_src", x = 923, y = 1025, w = 2, h = 28},
-		{id = "gauge-w2", src = "system_src", x = 927, y = 1025, w = 2, h = 28},
-		{id = "gauge-w3", src = "system_src", x = 923, y = 1025, w = 2, h = 28}
-
-
-	}
+	skin.image = build_images(geometry, notesInfo)
 	skin.imageset = {}
-	skin.value = {
-		{id = "note", src = "system_src", x = 100, y = 1211, w = 280, h = 37, divx = 10, digit = 4, ref = 74, align = 0},
-		{id = "total", src = "system_src", x = 100, y = 1211, w = 280, h = 37, divx = 10, digit = 4, ref = 368, align = 0},
-
-
-		{id = "lanecover-value", src = "system_src", x = 100, y = 1385, w = 150, h = 18, divx = 10, digit = 3, ref = 14, align = 1},
-		{id = "lanecover-green", src = "system_src", x = 100, y = 1385, w = 150, h = 18, divx = 10, digit = 4, ref = 313, align = 1},
-		{id = "lanecover-duration", src = "system_src", x = 100, y = 1385, w = 150, h = 18, divx = 10, digit = 4, ref = 312, align = 1},
-		{id = "lift-value", src = "system_src", x = 100, y = 1385, w = 150, h = 18, divx = 10, digit = 3, ref = 314, align = 1},
-
-		{id = "diff-best", src = "system_src", x = 470, y = 1220, w = 264, h = 56, divx = 12, divy = 2, digit = 5, ref = 152, align = 1},
-		{id = "diff-target", src = "system_src", x = 470, y = 1220, w = 264, h = 56, divx = 12, divy = 2, digit = 5, ref = 153, align = 1},
-		{id = "fsms-num", src = "system_src", x = 470, y = 1130, w = 180, h = 36, divx = 12, divy = 2, digit = 4, ref = 525, align = 1},
-
-
-		{id = "Score-num", src = "system_src", x = 10, y = 990, w = 610, h = 75, divx = 10, digit = 5, ref = 101, align = 1},
-		{id = "rate-num", src = "system_src", x = 100, y = 1403, w = 360, h = 49, divx = 10, digit = 3, ref = 102, align = 0},
-		{id = "rate-adot-num", src = "system_src", x = 100, y = 1452, w = 308, h = 37, divx = 11, digit = 2, ref = 103, align = 0},
-  {id = "scorediff", src = "system_src", x = 10, y = 990, w = 610, h = 75, divx = 10, digit = 5, ref = 12, align = 2},
-
-		
-		{id = "l-rate-num", src = "system_src", x = 470, y = 1166, w = 150, h = 18, divx = 10, digit = 3, ref = 102, align = 0},
-		{id = "l-rate-adot-num", src = "system_src", x = 470, y = 1166, w = 165, h = 18, divx = 11, digit = 2, ref = 103, align = 0},
-
-		{id = "score-best-dif", src = "system_src", x = 100, y = 1211, w = 336, h = 74, divx = 12, divy = 2, digit = 6, ref = 172, align = 0},
-		{id = "score-targ-dif", src = "system_src", x = 100, y = 1211, w = 336, h = 74, divx = 12, divy = 2, digit = 6, ref = 153, align = 0},
-		{id = "score-next-dif", src = "system_src", x = 324, y = 1285, w = 336, h = 74, divx = 12, divy = 2, digit = 6, ref = 154, align = 0},
-		{id = "score-best", src = "system_src", x = 100, y = 1285, w = 220, h = 28, divx = 10, digit = 5, ref = 170, align = 0},
-		{id = "score-targ", src = "system_src", x = 100, y = 1285, w = 220, h = 28, divx = 10, digit = 5, ref = 151, align = 0},
-
-		{id = "num-dt-pf", src = "system_src", x = 100, y = 1163, w = 360, h = 48, divx = 10, digit = 4, ref = 110, align = 2},
-		{id = "num-dt-gr", src = "system_src", x = 100, y = 1163, w = 360, h = 48, divx = 10, digit = 4, ref = 111, align = 2},
-		{id = "num-dt-gd", src = "system_src", x = 100, y = 1163, w = 360, h = 48, divx = 10, digit = 4, ref = 112, align = 2},
-		{id = "num-dt-bd", src = "system_src", x = 100, y = 1211, w = 280, h = 37, divx = 10, digit = 4, ref = 113, align = 2},
-		{id = "num-dt-pr", src = "system_src", x = 100, y = 1211, w = 280, h = 37, divx = 10, digit = 4, ref = 114, align = 2},
-		{id = "num-dt-ms", src = "system_src", x = 100, y = 1211, w = 280, h = 37, divx = 10, digit = 4, ref = 420, align = 2},
-		{id = "num-dt-br", src = "system_src", x = 100, y = 1211, w = 280, h = 37, divx = 10, digit = 4, ref = 425, align = 2},
-		{id = "num-dt-fa", src = "system_src", x = 100, y = 1285, w = 220, h = 28, divx = 10, digit = 4, ref = 423, align = 2},
-		{id = "num-dt-sl", src = "system_src", x = 100, y = 1285, w = 220, h = 28, divx = 10, digit = 4, ref = 424, align = 2},
-
-
-		{id = "gauge-num", src = "system_src", x = 100, y = 1073, w = 430, h = 54, divx = 10, digit = 3, ref = 107},
-		{id = "gauge-adot-num", src = "system_src", x = 100, y = 1127, w = 290, h = 36, divx = 10, digit = 1, ref = 407},
-
-
-		{id = "BPM-now", src = "system_src", x = 10, y = 994, w = 610, h = 75, divx = 10, digit = 5, ref = 160, align = 2},
-		{id = "BPM-max", src = "system_src", x = 100, y = 1211, w = 280, h = 37, divx = 10, digit = 4, ref = 90, align = 1},
-		{id = "BPM-min", src = "system_src", x = 100, y = 1211, w = 280, h = 37, divx = 10, digit = 4, ref = 91, align = 1},
-
-  {id = "hispeed-num", src = "system_src", x = 100, y = 1385, w = 165, h = 18, divx = 11, digit = 1, ref = 310, align = 1},
-		{id = "hispeed-adot-num", src = "system_src", x = 100, y = 1385, w = 165, h = 18, divx = 11, digit = 2, ref = 311, align = 1},
-
-		{id = "song-left-m", src = "system_src", x = 100, y = 1385, w = 165, h = 18, divx = 11, digit = 2, ref = 163, align = 1},
-		{id = "song-left-s", src = "system_src", x = 100, y = 1385, w = 165, h = 18, divx = 11, digit = 2, ref = 164, align = 1},
-		{id = "song-length-m", src = "system_src", x = 100, y = 1385, w = 165, h = 18, divx = 11, digit = 2, ref = 1163, align = 1},
-		{id = "song-length-s", src = "system_src", x = 100, y = 1385, w = 165, h = 18, divx = 11, digit = 2, ref = 1164, align = 1},
-
-		{id = "judge-num-pg", src = "judge_src", x = 217, y = 0, w = 290, h = 184, divx = 10, divy = 3, digit = 6, ref = 75, cycle = 120},
-		{id = "judge-num-gr", src = "judge_src", x = 217, y = 186, w = 290, h = 122, divx = 10, divy = 2, digit = 6, ref = 75, cycle = 80},
-		{id = "judge-num-gd", src = "judge_src", x = 217, y = 250, w = 290, h = 61, divx = 10, divy = 2, digit = 6, ref = 75, cycle = 80},
-		{id = "judge-num-bd", src = "judge_src", x = 217, y = 370, w = 580, h = 61, divx = 10, divy = 2, digit = 6, ref = 75, cycle = 80},
-		{id = "judge-num-pr", src = "judge_src", x = 217, y = 440, w = 580, h = 61, divx = 10, divy = 2, digit = 6, ref = 75, cycle = 80},
-		{id = "judge-num-ms", src = "judge_src", x = 217, y = 560, w = 580, h = 61, divx = 10, divy = 2, digit = 6, ref = 75, cycle = 80},
-
-
-	}
-	skin.text = {
-		{id = "tablename", font = 0, size = 26, ref = 1003, overflow = 1},
-		{id = "title", font = 1, align = 0, size = 21, ref = 12, overflow = 1},
-		{id = "playername", font = 1, size = 32, ref = 2, overflow = 1},
-  {id = "targetname", font = 1, size = 25, ref = 1, overflow = 1, align = 0},
-
-		{id = "load-genre", font = 0, size = 27, ref = 13, overflow = 1},
-		{id = "load-title", font = 1, size = 73, ref = 12, overflow = 1},
-		{id = "load-artist", font = 0, size = 41, ref = 16, overflow = 1},
-
-	}
+	skin.value = build_values()
+	skin.text = build_text()
 	skin.slider = {
 		{id = "song-progress", src = "system_src", x = 1080, y = 890, w = 20, h = 30, angle = 2, range = 710, type = 6},
 		{id = "lanecover", src = "lanecover_src", x = 0, y = 0, w = -1, h = -1, angle = 2, range = 853, type = 4},
@@ -603,39 +280,7 @@ local function main()
 		}
 	}
 
-		skin.note.dst = {}
-
-		geometry.notes_x = {}
-		geometry.notes_w = {}
-		
-		geometry.notes_w[8] = notesInfo.Sc_width
-		geometry.notes_w[1] = notesInfo.Wh_width
-
-		if isScratchRight() then
-			geometry.notes_x[1] = geometry.lane_x + geometry.lane_line_width
-			geometry.notes_x[8] = geometry.lane_x + geometry.lane_w - geometry.lane_line_width - geometry.notes_w[8]
-		else
-			geometry.notes_x[8] = geometry.lane_x + geometry.lane_line_width
-			geometry.notes_x[1] = geometry.notes_x[8] + geometry.notes_w[8] + geometry.lane_line_width
-		end
-
-		for i = 2, 7 do
-			if i % 2 == 0 then
-				geometry.notes_x[i] = geometry.notes_x[i-1] + notesInfo.Wh_width + geometry.lane_line_width
-				geometry.notes_w[i] = notesInfo.Bl_width
-			else
-				geometry.notes_x[i] = geometry.notes_x[i-1] + notesInfo.Bl_width + geometry.lane_line_width
-				geometry.notes_w[i] = notesInfo.Wh_width
-			end
-		end
-	
-		for i = 1, 8 do
-			skin.note.dst[i] = {
-				x = geometry.notes_x[i] + geometry.play_position,
-				y = geometry.lane_y + geometry.lane_line_width,
-				w = geometry.notes_w[i],
-				h = geometry.lane_h}
-		end
+	layout.apply_note_geometry(skin, geometry, notesInfo, isScratchRight())
 	
 
 
@@ -730,129 +375,10 @@ local function main()
 	}
  
 	skin.destination = {}
-
-   table.insert(skin.destination, {id = "bg", stretch = 1, dst = {
-    {x = 0, y = 0, w = 1920, h = 1080}}})
-
---BGA関連	
-
- if is2P() then
-  table.insert(skin.destination, {id = "bga", filter = 1, dst = {{x = -780+geometry.info_position , y = 200, w = geometry.bga_w, h = geometry.bga_h}}})
- -- table.insert(skin.destination, {id = -101, loop = 400, op = {80, 195}, filter = 1, stretch = 1, dst = {
- --  {time = 0, x =900, y = geometry.bga_y, w = 300,h=300, a = 0},
- --  {time = 400, a = 255}}})
-  table.insert(skin.destination, {id = "bga_soundonly", stretch = 1, draw = function()
-   if main_state.option(40) or main_state.option(170) then
-    return true
-   end
-  end, timer = 41, loop = 800, dst = {
-   {time = 0, x =-780+geometry.info_position,  y = 200, w = geometry.bga_w, h = geometry.bga_h, a = 0},
-   {time = 500},
-   {time = 800, a = 255}}})
-  table.insert(skin.destination, 		{id = -110, timer = 41, offset = 55, dst = {
-			{x = -780+geometry.info_position, y = geometry.bga_y, w = geometry.bga_w, h = geometry.bga_h, a = 0}}})
-else
- table.insert(skin.destination, {id = "bga", filter = 1, dst = {{x =980+geometry.info_position , y = 200, w = geometry.bga_w, h = geometry.bga_h}}})
- -- table.insert(skin.destination, {id = -101, loop = 400, op = {80, 195}, filter = 1, stretch = 1, dst = {
- --  {time = 0, x =980+geometry.info_position, y = geometry.bga_y, w = 300,h=300, a = 0},
- --  {time = 400, a = 255}}})
- table.insert(skin.destination, {id = "bga_soundonly", stretch = 1, draw = function()
-  if main_state.option(40) or main_state.option(170) then
-   return true
-  end
- end, timer = 41, loop = 800, dst = {
-  {time = 0, x =-780+geometry.info_position,  y = 200, w = geometry.bga_w, h = geometry.bga_h, a = 0},
-  {time = 500},
-  {time = 800, a = 255}}})
- table.insert(skin.destination, 		{id = -110, timer = 41, offset = 55, dst = {
-  {x =980+geometry.info_position, y = geometry.bga_y, w = geometry.bga_w, h = geometry.bga_h, a = 0}}})
- end
-
---曲情報エリア
---ここから
-	--ジャンル名・曲名
- if is2P() then
-  table.insert(skin.destination, {id = "title", filter = 1, dst = {{x = 400, y = 970, w = 575, h = 30}}})
-  table.insert(skin.destination, {id = "tablename", filter = 1, dst = {{x = 400, y = 1050, w = 575, h = 26}}})
- else
-  table.insert(skin.destination, {id = "title", filter = 1, dst = {{x = 1180, y = 970, w = 575, h = 30}}})
-  table.insert(skin.destination, {id = "tablename", filter = 1, dst = {{x = 1230, y = 1050, w = 575, h = 26}}})
- end
-
-
-
-	--notes
- table.insert(skin.destination, {id = "notes-head", dst = {{x = 585 + geometry.score_position, y = 300, w = 95, h = 21}}})
-	table.insert(skin.destination, {id = "note", dst = {{x = 790 + geometry.score_position, y = 280, w = 14, h = 18}}})
-
-	--曲の長さ、残り時間
-	--残り時間
-
- if is2P() then
-  table.insert(skin.destination,
-  {id = "song-left-m", dst = {
-   {x = 720 , y = 30, w = 24, h = 22}}})
-  table.insert(skin.destination,
-  {id = "song-left-s", dst = {
-   {x = 780 , y = 30, w = 24, h = 22}}})
-    table.insert(skin.destination,
-    {id = "song-time-colon", dst = {
-     {x = 762 , y = 30, w = 50, h = 50}}})
-    
- else
-  table.insert(skin.destination,
-  {id = "song-left-m", dst = {
-   {x = 250, y = 30, w = 24, h = 22}}})
-  table.insert(skin.destination,
-  {id = "song-left-s", dst = {
-   {x = 310, y = 30, w = 24, h = 22}}})
-   table.insert(skin.destination,
-    {id = "song-time-colon", dst = {
-     {x = 292 , y = 30, w = 50, h = 50}}})
- end
- 
-
-
-	--曲の長さスライダー
- if is2P() then
-  table.insert(skin.destination,
-  {id = "song-progress-bar", dst = {
-   {x = 1870, y = 0, w = 70, h = 1080}}})
-  table.insert(skin.destination,
-  {id = "song-progress", dst = {
-   {x = 1883, y = 1007, w = 18, h = 30}}})
- else
- 	table.insert(skin.destination,
-	{id = "song-progress-bar", dst = {
-		{x = 0 - geometry.info_position, y = 0, w = 70, h = 1080}}})
-	table.insert(skin.destination,
-	{id = "song-progress", dst = {
-		{x = 13  - geometry.info_position, y = 1007, w = 18, h = 30}}})
- end
-		
-
-
-	--BPM
-	--見出し
-	table.insert(skin.destination, {id = "BPM-head", dst = {{x = 52 + geometry.info_position, y = 255, w = 250, h = 60}}})
-
-	--枠
-	table.insert(skin.destination, {id = "BPM-bar", dst = {
-  {x = 875 - geometry.info_position, y = 80, w = 1000, h = 34}}})
-	--今のBPM
-	table.insert(skin.destination, {id = "BPM-now", dst = {
-		{x = 1270 - geometry.info_position, y = 125, w = 49, h = 56}}})
-	--最大BPM
-	table.insert(skin.destination, {id = "BPM-max",op = {177}, dst = {
-		{x = 1470 - geometry.info_position, y = 125, w = 14, h = 18}}})
-	--最小BPM
-	table.insert(skin.destination, {id = "BPM-min", op = {177}, dst = {
-		{x = 1270 - geometry.info_position, y = 125, w = 14, h = 18}}})
-	--BPM変わらない曲のとき
-	table.insert(skin.destination, {id = "BPM-no-change", op = {176}, dst = {
-		{x = 1470 - geometry.info_position, y = 125, w = 60, h = 21}}})
-  table.insert(skin.destination, {id = "BPM-no-change", op = {176}, dst = {
-  {x = 1270 - geometry.info_position, y = 125, w = 60, h = 21}}})
+	destinations.append_intro_destinations(skin, geometry, {
+		is_2p = is2P,
+		main_state = main_state,
+	})
 	
 
 	-- --プレイヤー情報

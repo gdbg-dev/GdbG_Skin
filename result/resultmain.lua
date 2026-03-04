@@ -23,6 +23,84 @@ local header = {
 	filepath = filepath
 }
 
+local function append_constant_text_entries(text_entries, entries)
+	for _, entry in ipairs(entries) do
+		table.insert(text_entries, entry)
+	end
+end
+
+local function append_grade_destinations(destinations, clearX, clearY)
+	for i = 0, 7 do
+		table.insert(destinations, {
+			id = "gradesmall" .. i,
+			loop = 200,
+			op = {320 + i},
+			dst = {
+				{time = 0, x = clearX + 10, y = clearY + 170, w = 101, h = 38, a = 0},
+				{time = 200, a = 255}
+			}
+		})
+		table.insert(destinations, {
+			id = "gradesmall" .. i,
+			loop = 200,
+			op = {300 + i},
+			dst = {
+				{time = 0, x = clearX + 190, y = clearY + 170, w = 101, h = 38, a = 0},
+				{time = 200, a = 255}
+			}
+		})
+		table.insert(destinations, {
+			id = "gradelarge" .. i,
+			loop = 200,
+			op = {300 + i},
+			dst = {
+				{time = 0, x = clearX + 1000, y = clearY + 300, w = 415, h = 178, a = 0},
+				{time = 200, a = 255}
+			}
+		})
+	end
+end
+
+local function append_judge_graph_numbers(destinations)
+	for i = 0, 4 do
+		table.insert(destinations, {
+			id = "jg" .. i,
+			loop = 200,
+			dst = {
+				{time = 0, x = 1060, y = 338 - 51 * i, w = 32, h = 37, a = 0},
+				{time = 200, a = 255}
+			}
+		})
+	end
+	table.insert(destinations, {
+		id = "miss",
+		loop = 200,
+		dst = {
+			{time = 0, x = 1060, y = 90, w = 32, h = 37, a = 0},
+			{time = 200, a = 255}
+		}
+	})
+end
+
+local function append_judge_labels(destinations, songX, songInfoY)
+	for i = 0, 4 do
+		table.insert(destinations, {
+			id = "judge" .. i,
+			filter = 1,
+			op = {180 + i},
+			dst = {{
+				x = songX + 330,
+				y = songInfoY + 600,
+				w = 280,
+				h = 24,
+				r = 221,
+				g = 229,
+				b = 237
+			}}
+		})
+	end
+end
+
 local function main()
 	local textproperty = require("lua.textproperty")
 	local imageproperty = require("lua.imageproperty")
@@ -97,12 +175,14 @@ local function main()
 
 	local ir_str = ""
 
-	
-	  table.insert(skin.text, {id = "avg",	font = 0, size = 24, align = 0, constantText = avg_str})
-	  table.insert(skin.text, {id = "std",	font = 0, size = 24, align = 0, constantText = std_str})
-	  table.insert(skin.text, {id = "player",	font = 0, size = 24, align = 2, constantText = playerid_str})
-	 	table.insert(skin.text, {id = "ir",	font = 0, size = 24, align = 2, constantText = ir_str})
-	  table.insert(skin.text, {id = "offline",	font = 0, size = 48, align = 2, constantText = "NETWORK OFFLINE"})
+		
+	append_constant_text_entries(skin.text, {
+		{id = "avg", font = 0, size = 24, align = 0, constantText = avg_str},
+		{id = "std", font = 0, size = 24, align = 0, constantText = std_str},
+		{id = "player", font = 0, size = 24, align = 2, constantText = playerid_str},
+		{id = "ir", font = 0, size = 24, align = 2, constantText = ir_str},
+		{id = "offline", font = 0, size = 48, align = 2, constantText = "NETWORK OFFLINE"}
+	})
 
 
 	skin.destination = {
@@ -178,30 +258,12 @@ local function main()
 		{id = "slow",	loop = 200, dst = {{time = 0, x = 1320, y = 299, w = 32, h = 37, a = 0},{time = 200, a = 255}}},
 		{id = "cb",	loop = 200, dst = {{time = 0, x = 1320, y = 260, w = 32, h = 37, a = 0},{time = 200, a = 255}}},
 	}
-	--Grades
-	for i = 0, 7 do
-		table.insert(skin.destination, {id = "gradesmall"..i,	loop = 200, op = {320 + 1 * i}, dst = {{time = 0, x = clearX + 10, y = clearY + 170,	w = 101, h = 38, a = 0},
-		{time = 200, a = 255}}}) --current
-		table.insert(skin.destination, {id = "gradesmall"..i,	loop = 200, op = {300 + 1 * i}, dst = {{time = 0, x = clearX + 190, y = clearY + 170,	w = 101, h = 38, a = 0},
-		{time = 200, a = 255}}}) --best
-		table.insert(skin.destination, {id = "gradelarge"..i,	loop = 200, op = {300 + 1 * i}, dst = {{time = 0, x = clearX + 1000,y = clearY + 300,	w = 415, h = 178, a = 0},
-		{time = 200, a = 255}}}) --big
-	end
+		--Grades
+		append_grade_destinations(skin.destination, clearX, clearY)
+		append_judge_graph_numbers(skin.destination)
 
-	for i = 0, 4 do
-		table.insert(skin.destination, {id = "jg"..i,	loop = 200, dst = {{time = 0, x = 1060, y = 338 - 51 * i, w = 32, h = 37, a = 0},
-		{time = 200, a = 255}}})
-
-	end
- table.insert(skin.destination, {id = "miss",	loop = 200, dst = {{time = 0, x = 1060, y = 90, w = 32, h = 37, a = 0},
- {time = 200, a = 255}}})
-
-
-
-	--Judges
-	for i = 0, 4 do
-		table.insert(skin.destination, {id = "judge"..i, filter = 1, op = {180 + 1 * i}, dst = {{x = songX + 330, y = songInfoY + 600, w = 280, h = 24, r = 221, g = 229, b = 237}}})
-	end
+		--Judges
+		append_judge_labels(skin.destination, songX, songInfoY)
 
 	--fadein
 	table.insert(skin.destination, {id = -110, loop = -1, dst = {
