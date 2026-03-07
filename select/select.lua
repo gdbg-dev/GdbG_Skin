@@ -48,6 +48,221 @@ local function numbered_image_ids(prefix, count, suffix)
 	return ids
 end
 
+local function append_entries(target, entries)
+	for _, entry in ipairs(entries) do
+		table.insert(target, entry)
+	end
+end
+
+local function build_mode_key_images()
+	local ids = {"allkeys", "5keys", "7keys", "10keys", "14keys", "9keys", "24keys", "24keysDP"}
+	local entries = {}
+	for i, id in ipairs(ids) do
+		table.insert(entries, {
+			id = id,
+			src = 11,
+			x = 0,
+			y = (i - 1) * 48,
+			w = 180,
+			h = 48
+		})
+	end
+	return entries
+end
+
+local function build_key_count_images()
+	local ids = {"5keysN", "7keysN", "10keysN", "14keysN", "9keysN", "24keysN", "24keysDPN"}
+	local entries = {}
+	for i, id in ipairs(ids) do
+		table.insert(entries, {
+			id = id,
+			src = 12,
+			x = 1380,
+			y = (i - 1) * 50,
+			w = 181,
+			h = 50
+		})
+	end
+	return entries
+end
+
+local function build_lamp_image_entries(id_prefix, x, failed_width)
+	local states = {
+		{suffix = "noplay", y = 920},
+		{suffix = "failed", y = 0, cycle = 33},
+		{suffix = "assist", y = 92},
+		{suffix = "lassist", y = 184},
+		{suffix = "easy", y = 276},
+		{suffix = "normal", y = 368},
+		{suffix = "hard", y = 460},
+		{suffix = "exhard", y = 552, cycle = 133},
+		{suffix = "fc", y = 644, cycle = 133},
+		{suffix = "perfect", y = 736, cycle = 133},
+		{suffix = "max", y = 828, cycle = 133}
+	}
+	local entries = {}
+	for _, state in ipairs(states) do
+		local width = 118
+		if state.suffix == "failed" then
+			width = failed_width
+		end
+		local entry = {
+			id = id_prefix .. "-" .. state.suffix,
+			src = 3,
+			x = x,
+			y = state.y,
+			w = width,
+			h = 92,
+			divx = 2
+		}
+		if state.cycle ~= nil then
+			entry.cycle = state.cycle
+		end
+		table.insert(entries, entry)
+	end
+	return entries
+end
+
+local function build_rank_image_entries()
+	local defs = {
+		{id = "rank_aaa", y = 0},
+		{id = "rank_aa", y = 170},
+		{id = "rank_a", y = 335},
+		{id = "rank_b", y = 505},
+		{id = "rank_c", y = 675},
+		{id = "rank_d", y = 840},
+		{id = "rank_e", y = 1010},
+		{id = "rank_f", y = 1175},
+		{id = "rank_max", y = 384}
+	}
+	local entries = {}
+	for _, def in ipairs(defs) do
+		table.insert(entries, {id = def.id, src = 16, x = 0, y = def.y, w = 400, h = 165})
+	end
+	return entries
+end
+
+local function build_constraint_image_entries()
+	local ids = {"const-random", "const-mirror", "const-nospeed", "const-nogood", "const-nogreat"}
+	local entries = {}
+	for i, id in ipairs(ids) do
+		table.insert(entries, {id = id, src = 8, x = 0, y = (i - 1) * 62, w = 400, h = 62})
+	end
+	return entries
+end
+
+local function build_imageset_option_entries()
+	local configs = {
+		{id = "option-exjudge", ref = 301, prefix = "option-selector2", count = 2},
+		{id = "option-constant", ref = 302, prefix = "option-selector2", count = 2},
+		{id = "option-judgearea", ref = 303, prefix = "option-selector2", count = 2},
+		{id = "option-legacy", ref = 304, prefix = "option-selector2", count = 2},
+		{id = "option-marknote", ref = 305, prefix = "option-selector2", count = 2},
+		{id = "option-bpmguide", ref = 306, prefix = "option-selector2", count = 2},
+		{id = "option-nomine", ref = 307, prefix = "option-selector2", count = 2},
+		{id = "option-random", ref = 42, prefix = "option-selector11", count = 10},
+		{id = "option-gauge", ref = 40, prefix = "option-selector12", count = 6},
+		{id = "option-hsfix", ref = 55, prefix = "option-selector13", count = 5},
+		{id = "option-random2", ref = 43, prefix = "option-selector11", count = 10, suffix = "_2p"},
+		{id = "option-dp", ref = 54, prefix = "option-selector14", count = 4},
+		{id = "option-bga", ref = 72, prefix = "option-selector3", count = 3},
+		{id = "option-gas", ref = 78, prefix = "option-selector4", count = 5},
+		{id = "option-autoadjust", ref = 75, prefix = "option-selector2", count = 2}
+	}
+	local entries = {}
+	for _, config in ipairs(configs) do
+		table.insert(entries, {
+			id = config.id,
+			ref = config.ref,
+			images = numbered_image_ids(config.prefix, config.count, config.suffix)
+		})
+	end
+	return entries
+end
+
+local function build_numeric_value_entries(defs, base)
+	local entries = {}
+	for _, def in ipairs(defs) do
+		local entry = {}
+		for k, v in pairs(base) do
+			entry[k] = v
+		end
+		for k, v in pairs(def) do
+			entry[k] = v
+		end
+		table.insert(entries, entry)
+	end
+	return entries
+end
+
+local function build_score_value_entries()
+	return build_numeric_value_entries({
+		{id = "score_count", w = 352, divx = 11, digit = 4, ref = 171},
+		{id = "max_score", w = 352, divx = 11, digit = 4, ref = 72},
+		{id = "total_notes", w = 353, divx = 11, digit = 4, ref = 74},
+		{id = "miss_count", w = 352, divx = 11, digit = 4, ref = 76},
+		{id = "combo_count", w = 352, divx = 11, digit = 4, ref = 75},
+		{id = "clear_count", w = 320, divx = 10, digit = 4, ref = 78},
+		{id = "nextrank", w = 352, divx = 11, digit = 4, align = 1, ref = 154},
+		{id = "play_count", w = 320, divx = 10, digit = 6, align = 1, ref = 77},
+		{id = "notes_count", w = 352, divx = 11, digit = 4, ref = 74}
+	}, {
+		src = 6,
+		x = 0,
+		y = 63,
+		h = 36
+	})
+end
+
+local function build_time_value_entries()
+	return build_numeric_value_entries({
+		{id = "time_year", w = 356, digit = 4, ref = 21},
+		{id = "time_month", w = 353, digit = 2, padding = 1, ref = 22},
+		{id = "time_day", w = 353, digit = 2, padding = 1, ref = 23},
+		{id = "time_hour", w = 353, digit = 2, padding = 1, ref = 24},
+		{id = "time_minute", w = 353, digit = 2, padding = 1, ref = 25},
+		{id = "time_second", w = 353, digit = 2, padding = 1, ref = 26}
+	}, {
+		src = 6,
+		x = 360,
+		y = 118,
+		h = 41,
+		divx = 11
+	})
+end
+
+local function build_dst_frame(base, time, alpha)
+	local frame = {time = time}
+	for k, v in pairs(base) do
+		frame[k] = v
+	end
+	frame.a = alpha
+	return frame
+end
+
+local function add_fade_pair(destination, config)
+	table.insert(destination, {
+		id = config.id,
+		loop = 300,
+		op = {config.op},
+		timer = config.timer_on,
+		dst = {
+			build_dst_frame(config.base, 0, 0),
+			{time = 300, a = 255}
+		}
+	})
+	table.insert(destination, {
+		id = config.id,
+		loop = 300,
+		op = {-config.op},
+		timer = config.timer_off,
+		dst = {
+			build_dst_frame(config.base, 0, 255),
+			{time = 300, a = 0}
+		}
+	})
+end
+
 local function build_songlist_entries(active)
 	local entries = {}
 	for i = 1, 23 do
@@ -134,8 +349,9 @@ end
 
 local function build_bartext_entries()
 	return {
-		{id = "bartext", filter = 1, dst = {{x = 150, y = 0, w = 36, h = 48, b = 0}}},
-		{id = "bartext", filter = 1, dst = {{x = 150, y = 0, w = 36, h = 48}}}
+		-- bartext は「非選択: 黄寄り」+「選択中: 白」の2レイヤで描画する。
+		{id = "bartext", filter = 1, dst = {{x = 150, y = 10, w = 36, h = 32, b = 0}}},
+		{id = "bartext", filter = 1, dst = {{x = 150, y = 10, w = 36, h = 32}}}
 	}
 end
 
@@ -197,22 +413,6 @@ local function main()
 		{id = "sorttext", src = 60, x = 0, y = 0, w = 1816, h = 92},
 
 		{id = "songs_font", src = 12, x = 1078, y = 52, w = 292, h = 48},
-		{id = "allkeys", src = 11, x = 0, y = 0, w = 180, h = 48},
-		{id = "5keys", src = 11, x = 0, y = 48, w = 180, h = 48},
-		{id = "7keys", src = 11, x = 0, y = 96, w = 180, h = 48},
-		{id = "10keys", src = 11, x = 0, y = 144, w = 180, h = 48},
-		{id = "14keys", src = 11, x = 0, y = 192, w = 180, h = 48},
-		{id = "9keys", src = 11, x = 0, y = 240, w = 180, h = 48},
-		{id = "24keys", src = 11, x = 0, y = 288, w = 180, h = 48},
-		{id = "24keysDP", src = 11, x = 0, y = 336, w = 180, h = 48},
-
-		{id = "5keysN", src = 12, x = 1380, y = 0, w = 181, h = 50},
-		{id = "7keysN", src = 12, x = 1380, y = 50, w = 181, h = 50},
-		{id = "10keysN", src = 12, x = 1380, y = 100, w = 181, h = 50},
-		{id = "14keysN", src = 12, x = 1380, y = 150, w = 181, h = 50},
-		{id = "9keysN", src = 12, x = 1380, y = 200, w = 181, h = 50},
-		{id = "24keysN", src = 12, x = 1380, y = 250, w = 181, h = 50},
-		{id = "24keysDPN", src = 12, x = 1380, y = 300, w = 181, h = 50},
 		{id = "Notes-text", src = 12, x = 1380, y = 343, w = 181, h = 50},
 
 		{id = "judge_veryeasy", src = 57, x = 0, y = 0, w = 135, h = 24, act = 19},
@@ -237,16 +437,6 @@ local function main()
 		{id = "bpm-dash", src = 6, x = 653, y = 212, w = 28, h = 52},
 		{id = "bpm", src = 6, x = 505, y = 212, w = 141, h = 52},
 
-		{id = "rank_aaa", src = 16, x = 0, y = 0, w = 400, h = 165},
-		{id = "rank_aa", src = 16, x = 0, y = 170, w = 400, h = 165},
-		{id = "rank_a", src = 16, x = 0, y = 335, w = 400, h = 165},
-		{id = "rank_b", src = 16, x = 0, y = 505, w = 400, h = 165},
-		{id = "rank_c", src = 16, x = 0, y = 675, w = 400, h = 165},
-		{id = "rank_d", src = 16, x = 0, y = 840, w = 400, h = 165},
-		{id = "rank_e", src = 16, x = 0, y = 1010, w = 400, h = 165},
-		{id = "rank_f", src = 16, x = 0, y = 1175, w = 400, h = 165},
-		{id = "rank_max", src = 16, x = 0, y = 384, w = 400, h = 165},
-
   {id = "button_ir", src = 56, x = 0, y = 0, w = 80, h = 120, act = 210},
 		{id = "button_autoplay", src = 56, x = 80, y = 0, w = 80, h = 120, act = 16},
   {id = "button_practice", src = 56, x = 155, y = 0, w = 90, h = 120, act = 315},
@@ -268,42 +458,6 @@ local function main()
 		{id = "bar-table", src = 2, x = 0, y = 400, w = 1000, h = 80},
 		{id = "bar-search", src = 2, x = 0, y = 560, w = 1000, h = 80},
 		{id = "bar-select", src = 9, x = 0, y = 0, w = 1009, h = 98},
-
-		{id = "lamp-noplay", src = 3, x = 0, y = 920, w = 118, h = 92, divx = 2},
-		{id = "lamp-failed", src = 3, x = 0, y = 0, w = 1, h = 92, divx = 2, cycle = 33},
-		{id = "lamp-assist", src = 3, x = 0, y = 92, w = 118, h = 92, divx = 2},
-		{id = "lamp-lassist", src = 3, x = 0, y = 184, w = 118, h = 92, divx = 2},
-		{id = "lamp-easy", src = 3, x = 0, y = 276, w = 118, h = 92, divx = 2},
-		{id = "lamp-normal", src = 3, x = 0, y = 368, w = 118, h = 92, divx = 2},
-		{id = "lamp-hard", src = 3, x = 0, y = 460, w = 118, h = 92, divx = 2},
-		{id = "lamp-exhard", src = 3, x = 0, y = 552, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "lamp-fc", src = 3, x = 0, y = 644, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "lamp-perfect", src = 3, x = 0, y = 736, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "lamp-max", src = 3, x = 0, y = 828, w = 118, h = 92, divx = 2, cycle = 133},
-
-		{id = "player-lamp-noplay", src = 3, x = 118, y = 920, w = 118, h = 92, divx = 2},
-		{id = "player-lamp-failed", src = 3, x = 118, y = 0, w = 118, h = 92, divx = 2, cycle = 33},
-		{id = "player-lamp-assist", src = 3, x = 118, y = 92, w = 118, h = 92, divx = 2},
-		{id = "player-lamp-lassist", src = 3, x = 118, y = 184, w = 118, h = 92, divx = 2},
-		{id = "player-lamp-easy", src = 3, x = 118, y = 276, w = 118, h = 92, divx = 2},
-		{id = "player-lamp-normal", src = 3, x = 118, y = 368, w = 118, h = 92, divx = 2},
-		{id = "player-lamp-hard", src = 3, x = 118, y = 460, w = 118, h = 92, divx = 2},
-		{id = "player-lamp-exhard", src = 3, x = 118, y = 552, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "player-lamp-fc", src = 3, x = 118, y = 644, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "player-lamp-perfect", src = 3, x = 118, y = 736, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "player-lamp-max", src = 3, x = 118, y = 828, w = 118, h = 92, divx = 2, cycle = 133},
-
-		{id = "rival-lamp-noplay", src = 3, x = 236, y = 920, w = 118, h = 92, divx = 2},
-		{id = "rival-lamp-failed", src = 3, x = 236, y = 0, w = 118, h = 92, divx = 2, cycle = 33},
-		{id = "rival-lamp-assist", src = 3, x = 236, y = 92, w = 118, h = 92, divx = 2},
-		{id = "rival-lamp-lassist", src = 3, x = 236, y = 184, w = 118, h = 92, divx = 2},
-		{id = "rival-lamp-easy", src = 3, x = 236, y = 276, w = 118, h = 92, divx = 2},
-		{id = "rival-lamp-normal", src = 3, x = 236, y = 368, w = 118, h = 92, divx = 2},
-		{id = "rival-lamp-hard", src = 3, x = 236, y = 460, w = 118, h = 92, divx = 2},
-		{id = "rival-lamp-exhard", src = 3, x = 236, y = 552, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "rival-lamp-fc", src = 3, x = 236, y = 644, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "rival-lamp-perfect", src = 3, x = 236, y = 736, w = 118, h = 92, divx = 2, cycle = 133},
-		{id = "rival-lamp-max", src = 3, x = 236, y = 828, w = 118, h = 92, divx = 2, cycle = 133},
 
 		{id = "trophy-bronze", src = 4, x = 320, y = 0, w = 32, h = 32},
 		{id = "trophy-silver", src = 4, x = 352, y = 0, w = 32, h = 32},
@@ -357,12 +511,6 @@ local function main()
 		{id = "exh-gauge", src = 0, x = 1486, y = 160, w = 141, h = 40},
 		{id = "hazard", src = 0, x = 1486, y = 200, w = 141, h = 40},
 
-		{id = "const-random", src = 8, x = 0, y = 0, w = 400, h = 62},
-		{id = "const-mirror", src = 8, x = 0, y = 62, w = 400, h = 62},
-		{id = "const-nospeed", src = 8, x = 0, y = 124, w = 400, h = 62},
-		{id = "const-nogood", src = 8, x = 0, y = 186, w = 400, h = 62},
-		{id = "const-nogreat", src = 8, x = 0, y = 248, w = 400, h = 62},
-
 		{id = "mainbpm", src = 0, x = 130, y = 550, w = 62, h = 13},
 
 		{id = "sidebar", src = 0, x = 0, y = 0, w = 110, h = 920},
@@ -381,6 +529,13 @@ local function main()
 		{id = "scrollbar", src = 0, x = 456, y = 0, w = 40, h = 920},
   {id = "sideframe", src = 15, x = 1, y = 0, w = 733, h = 1018}
 	}
+		append_entries(skin.image, build_mode_key_images())
+		append_entries(skin.image, build_key_count_images())
+		append_entries(skin.image, build_lamp_image_entries("lamp", 0, 1))
+		append_entries(skin.image, build_lamp_image_entries("player-lamp", 118, 118))
+		append_entries(skin.image, build_lamp_image_entries("rival-lamp", 236, 118))
+		append_entries(skin.image, build_rank_image_entries())
+		append_entries(skin.image, build_constraint_image_entries())
 		table.insert(skin.image, {id = "option-selector101", src = 59, x = 320, y = 375, w = 288, h = 760})
 		add_option_selector_images(skin.image, "option-selector11", 10, 320, 375, -50)
 		add_option_selector_images(skin.image, "option-selector11", 10, 320, 375, -50, "_2p")
@@ -393,33 +548,13 @@ local function main()
 
 		skin.slider = {
 		{id = "scroll", src = 0, x = 500, y = 0, w = 32, h = 52, range = -876, type = 1},
-		-- volumeslider は背景に合わせて、つまみの可動幅を少し短くする。
-		{id = "volumeslider_master",	src = 40, x = 468, y = 358,  w = 26,  h = 44, angle = 1, range = 180, type = 17},
-		{id = "volumeslider_key",	src = 40, x = 468, y = 358,  w = 26,  h = 44, angle = 1, range = 180, type = 18},
-		{id = "volumeslider_bgm",	src = 40, x = 468, y = 358, w = 26,   h = 44, angle = 1, range = 180, type = 19}
+		{id = "volumeslider_master",	src = 40, x = 468, y = 358,  w = 26,  h = 44, angle = 1, range = 200, type = 17},
+		{id = "volumeslider_key",	src = 40, x = 468, y = 358,  w = 26,  h = 44, angle = 1, range = 190, type = 18},
+		{id = "volumeslider_bgm",	src = 40, x = 468, y = 358, w = 26,   h = 44, angle = 1, range = 190, type = 19}
 	}
 	skin.imageset = {
 		{id = "bar", images = {"bar-song","bar-folder","bar-table","bar-grade","bar-nograde","bar-command","bar-search","bar-nosong"}},
 		{id = "modeset", ref = 11, images = {"allkeys","5keys","7keys","10keys","14keys","9keys","24keys","24keysDP"}, act = 11},
-
-
-			{id = "option-exjudge", ref = 301, images = numbered_image_ids("option-selector2", 2)},
-			{id = "option-constant", ref = 302, images = numbered_image_ids("option-selector2", 2)},
-			{id = "option-judgearea", ref = 303, images = numbered_image_ids("option-selector2", 2)},
-			{id = "option-legacy", ref = 304, images = numbered_image_ids("option-selector2", 2)},
-			{id = "option-marknote", ref = 305, images = numbered_image_ids("option-selector2", 2)},
-			{id = "option-bpmguide", ref = 306, images = numbered_image_ids("option-selector2", 2)},
-			{id = "option-nomine", ref = 307, images = numbered_image_ids("option-selector2", 2)},
-
-			{id = "option-random", ref = 42, images = numbered_image_ids("option-selector11", 10)},
-			{id = "option-gauge", ref = 40, images = numbered_image_ids("option-selector12", 6)},
-			{id = "option-hsfix", ref = 55, images = numbered_image_ids("option-selector13", 5)},
-			{id = "option-random2", ref = 43, images = numbered_image_ids("option-selector11", 10, "_2p")},
-			{id = "option-dp", ref = 54, images = numbered_image_ids("option-selector14", 4)},
-
-			{id = "option-bga", ref = 72, images = numbered_image_ids("option-selector3", 3)},
-			{id = "option-gas", ref = 78, images = numbered_image_ids("option-selector4", 5)},
-			{id = "option-autoadjust", ref = 75, images = numbered_image_ids("option-selector2", 2)},
 
 		{id = "note-mod", ref = 42, images = {"nonran","mirror","ran","rran","sran","spiral","hran","ascr","exran","exsran"}},
 		{id = "note-mod2", ref = 43, images = {"nonran","mirror","ran","rran","sran","spiral","hran","ascr","exran","exsran"}},
@@ -427,37 +562,19 @@ local function main()
 		{id = "dp", ref = 54, images = {"no-dp","dp-flip","dpb", "dpb-as"}},
 		{id = "gaugemod", ref = 40, images = {"aeasy-gauge","easy-gauge","normal-gauge","hard-gauge","exh-gauge","hazard"}}
 	}
+	append_entries(skin.imageset, build_imageset_option_entries())
 
 		skin.value = {
 			{id = "maxbpm", src = 6, x = 0, y = 212, w = 440, h = 54, divx = 10, digit = 3, align = 1, ref = 90},
 			{id = "minbpm", src = 6, x = 0, y = 212, w = 440, h = 54, divx = 10, digit = 3, align = 0, ref = 91},
-
-			{id = "score_count", src = 6, x = 0, y = 63, w = 352, h = 36, divx = 11, digit = 4, ref = 171},
-			{id = "max_score", src = 6, x = 0, y = 63, w = 352, h = 36, divx = 11, digit = 4, ref = 72},
-			{id = "total_notes", src = 6, x = 0, y = 63, w = 353, h = 36, divx = 11, digit = 4, ref = 74},
-			{id = "miss_count", src = 6, x = 0, y = 63, w = 352, h = 36, divx = 11, digit = 4, ref = 76},
-			{id = "combo_count", src = 6, x = 0, y = 63, w = 352, h = 36, divx = 11, digit = 4, ref = 75},
-			{id = "clear_count", src = 6, x = 0, y = 63, w = 320, h = 36, divx = 10, digit = 4, ref = 78},
-			{id = "nextrank", src = 6, x = 0, y = 63, w = 352, h = 36, align = 1, divx = 11, digit = 4, ref = 154},
-			{id = "play_count", src = 6, x = 0, y = 63, w = 320, h = 36, align = 1, divx = 10, digit = 6, ref = 77},
-
-			{id = "notes_count", src = 6, x = 0, y = 63, w = 352, h = 36, divx = 11, digit = 4, ref = 74},
-
 			{id = "playlevel_bar", src = 6, x = 0, y = 0, w = 440, h = 54, divx = 10, align = 2, digit = 2},
-
-			{id = "time_year", src = 6, x = 360, y = 118, w = 356, h = 41, divx = 11, digit = 4, ref = 21},
-			{id = "time_month", src = 6, x = 360, y = 118, w = 353, h = 41, divx = 11, digit = 2, padding = 1, ref = 22},
-			{id = "time_day", src = 6, x = 360, y = 118, w = 353, h = 41, divx = 11, digit = 2, padding = 1, ref = 23},
-			{id = "time_hour", src = 6, x = 360, y = 118, w = 353, h = 41, divx = 11, digit = 2, padding = 1, ref = 24},
-			{id = "time_minute", src = 6, x = 360, y = 118, w = 353, h = 41, divx = 11, digit = 2, padding = 1, ref = 25},
-			{id = "time_second", src = 6, x = 360, y = 118, w = 353, h = 41, divx = 11, digit = 2, padding = 1, ref = 26},
-
 			{id = "duration", src = 6, x = 0, y = 63, w = 320, h = 36, divx = 10, digit = 4, align = 0, ref = 313},
 			{id = "duration-ms", src = 6, x = 0, y = 63, w = 320, h = 36, divx = 10, digit = 4, align = 0, ref = 312},
 			{id = "judgetiming", src = 61, x = -3, y = 0, w = 275, h = 56, divx = 12, divy = 2, digit = 3, ref = 12},
-
 			{id = "mainbpm-num", src = 6, x = 0, y = 212, w = 440, h = 54, divx = 10, align = 1, digit = 3, ref = 92},
 		}
+		append_entries(skin.value, build_score_value_entries())
+		append_entries(skin.value, build_time_value_entries())
 	skin.text = {
 			{id = "dir", font = 3, size = 24, overflow = 1, align = 0, ref = 1000},
 			{id = "artist", font = 3, size = 24, overflow = 1, align = 0, ref = 16},
@@ -470,7 +587,7 @@ local function main()
 	  
 			{id = "bigtitle", font = 1, size = -72, overflow = 1, align = 0, ref = 10},
 
-			{id = "bartext", font = 3, size = 36},
+			{id = "bartext", font = 3, size = 24},
 			{id = "search", font = 3, size = 24, ref = 30},
 	}
 	skin.graph = {
@@ -546,10 +663,11 @@ local function main()
 	local notes_graph_entry = {{id = "notes-graph", type = 0}}
 	local bpm_graph_entry = {{id = "bpmgraph"}}
 
+	-- songlist はヘルパーで組み立て、配置仕様は既存値を維持する。
 	skin.songlist = {
 		id = "songlist",
 		center = 7,
-		clickable = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18},
+		clickable = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18},
 		listoff = build_songlist_entries(false),
 		liston = build_songlist_entries(true),
 		text = build_bartext_entries(),
@@ -561,7 +679,7 @@ local function main()
 		label = build_label_entries(label_configs),
 		graph = graph_entry,
 		judgegraph = notes_graph_entry,
-		bpmgraph = bpm_graph_entry,
+		bpmgraph = bpm_graph_entry
 	}
 
 	skin.destination = {
@@ -619,13 +737,13 @@ local function main()
 		}},
 		{id = "volumeslider_master", filter = 1, op = {2,5}, dst = {
 			-- 3本のつまみは背景パネルの中に収まる位置へ揃える。
-			{x = 920, y = 1015, w = 24, h = 30, acc = 2}
+			{x = 911, y = 1015, w = 24, h = 30, acc = 2}
 		}},
 		{id = "volumeslider_key", filter = 1, op = {2,5}, dst = {
-			{x = 920, y = 965, w = 24, h = 30, acc = 0}
+			{x = 911, y = 965, w = 24, h = 30, acc = 0}
 		}},
 		{id = "volumeslider_bgm", filter = 1, op = {2,5}, dst = {
-			{x = 920, y = 910, w = 24, h = 30, acc = 2}
+			{x = 911, y = 910, w = 24, h = 30, acc = 2}
 		}},
 
 			{id = "volumemenu", dst = {
@@ -787,22 +905,22 @@ local function main()
 
 		-- ボタン群は縦横比を保ったまま同じ高さにそろえる。
 		{id = "button_ir", op = {5, -1, -1030}, dst = {
-			{x = 255, y = 915, w = 100, h = 150}
+			{x = 262, y = 930, w = 87, h = 130}
 		}},
 		{id = "button_autoplay", op = {5, -1, -1030}, dst = {
-			{x = 360, y = 915, w = 100, h = 150}
+			{x = 367, y = 930, w = 87, h = 130}
 		}},
 		{id = "button_practice", op = {5, -1, -1030}, dst = {
-			{x = 465, y = 915, w = 113, h = 150}
+			{x = 473, y = 930, w = 98, h = 130}
 		}},
 		{id = "button_conf1", op = {5, -1, -1030}, dst = {
-			{x = 650, y = 915, w = 113, h = 150}
+			{x = 658, y = 930, w = 98, h = 130}
 		}},
 		{id = "button_conf2", op = {5, -1, -1030}, dst = {
-			{x = 768, y = 915, w = 103, h = 150}
+			{x = 775, y = 930, w = 89, h = 130}
 		}},
 		{id = "button_replay", op = {1205, -1030}, dst = {
-			{time = 0, x = 1000, y = 915, w = 70, h =100, a = 255},
+			{time = 0, x = 1000, y = 930, w = 70, h =100, a = 255},
 			{time = 450, a = 0},
 			{time = 900, a = 255}
 		}},
@@ -845,214 +963,37 @@ local function main()
 		{id = "time_minute", dst = {{x = 802, y = 31, w = 18, h = 22}}},
 		{id = "song_colon", dst = {{x = 838, y = 31, w = 8, h = 22}}},
 		{id = "time_second", dst = {{x = 852, y = 31, w = 18, h = 22}}},
- 		 {id = "bottombar", dst = {{x = 905, y = 5, w = 1000, h = 50}}},
-
+		 {id = "bottombar", dst = {{x = 905, y = 5, w = 1000, h = 50}}}
+		}
 		-- option-panel 背面に不透明の下地を敷いて、元画像の透けを抑える。
-		{id = "blank", loop = 300, op = {21}, timer = 21, dst = {
-			{time = 0, x = 310, y = 100, w = 1300, h = 960, r = 10, g = 10, b = 10, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "blank", loop = 300, op = {-21}, timer = 31, dst = {
-			{time = 0, x = 310, y = 100, w = 1300, h = 960, r = 10, g = 10, b = 10, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-panel1", loop = 300, op = {21}, timer = 21,  dst = {
-			{time = 0, x = 310, y = 100, w = 1300, h = 960, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-panel1", loop = 300, op = {-21}, timer = 31,  dst = {
-			{time = 0, x = 310, y = 100, w = 1300, h = 960, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-pacemaker", loop = 300, op = {21}, timer = 21,  dst = {
-			{time = 0, x = 342, y = 0, w = 288, h = 760, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-pacemaker", loop = 300, op = {-21}, timer = 31,  dst = {
-			{time = 0, x = 342, y = 0, w = 288, h = 760, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-random", loop = 300, op = {21}, timer = 21,   dst = {
-			{time = 0, x = 605, y = 0,  w = 288, h = 757, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-random", loop = 300, op = {-21}, timer = 31,   dst = {
-			{time = 0, x = 605, y = 0, w = 288, h = 757, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-gauge", loop = 300, op = {21}, timer = 21,  dst = {
-			{time = 0, x = 792, y = 0, w = 288, h = 760, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-gauge", loop = 300, op = {-21}, timer = 31,  dst = {
-			{time = 0, x = 792, y = 0, w = 288, h = 760, a = 255},
-			{time = 300, a = 0}
-		}},
-  		{id = "option-dp", loop = 300, op = {21}, timer = 21,  dst = {
-			{time = 0, x = 972, y = 0, w = 288, h = 760, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-dp", loop = 300, op = {-21}, timer = 31,  dst = {
-			{time = 0, x = 972, y = 0, w = 288, h = 760, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-hsfix", loop = 300, op = {21}, timer = 21,  dst = {
-			{time = 0, x = 1157, y = 0, w = 288, h = 760, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-hsfix", loop = 300, op = {-21}, timer = 31,  dst = {
-			{time = 0, x = 1157, y = 0, w = 288, h = 760, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-random2", loop = 300, op = {21}, timer = 21,  dst = {
-			{time = 0, x = 1337, y = 0, w = 288, h = 760, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-random2", loop = 300, op = {-21}, timer = 31,  dst = {
-			{time = 0, x = 1337, y = 0, w = 288, h = 760, a = 255},
-			{time = 300, a = 0}
-		}},
-
-		{id = "blank", loop = 300, op = {22}, timer = 22, dst = {
-			{time = 0, x = 450, y = 100, w = 1020, h = 960, r = 10, g = 10, b = 10, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "blank", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 450, y = 100, w = 1020, h = 960, r = 10, g = 10, b = 10, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-panel2", loop = 300, op = {22}, timer = 22, dst = {
-			{time = 0, x = 450, y = 100, w = 1020, h = 960, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-panel2", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 450, y = 100, w = 1020, h = 960, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-exjudge", loop = 300, op = {22}, timer = 22, dst = {
-			-- option-panel2 の中身は、見た目の中心に寄るように少し上へ補正する。
-			{time = 0, x = 517, y = -227, w = 280, h = 680, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-exjudge", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 517, y = -227, w = 280, h = 680, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-constant", loop = 300, op = {22}, timer = 22, dst = {
-			{time = 0, x = 637, y = 290, w = 280, h = 680, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-constant", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 637, y = 290, w = 280, h = 680, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-judgearea", loop = 300, op = {22}, timer = 22, dst = {
-			{time = 0, x = 757, y = -227, w = 280, h = 680, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-judgearea", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 757, y = -227, w = 280, h = 680, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-legacy", loop = 300, op = {22}, timer = 22, dst = {
-			{time = 0, x = 877, y = 290, w = 280, h = 680, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-legacy", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 877, y = 290, w = 280, h = 680, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-marknote", loop = 300, op = {22}, timer = 22, dst = {
-			{time = 0, x = 997, y = -227, w = 280, h = 680, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-marknote", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 997, y = -227, w = 280, h = 680, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-bpmguide", loop = 300, op = {22}, timer = 22, dst = {
-			{time = 0, x = 1117, y = 290, w = 280, h = 680, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-bpmguide", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 1117, y = 290, w = 280, h = 680, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-nomine", loop = 300, op = {22}, timer = 22, dst = {
-			{time = 0, x = 1237, y = -227, w = 280, h = 680, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-nomine", loop = 300, op = {-22}, timer = 32, dst = {
-			{time = 0, x = 1237, y = -227, w = 280, h = 680, a = 255},
-			{time = 300, a = 0}
-		}},
-
-		{id = "blank", loop = 300, op = {23}, timer = 23, dst = {
-			{time = 0, x = 450, y = 100, w = 1020, h = 960, r = 10, g = 10, b = 10, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "blank", loop = 300, op = {-23}, timer = 33, dst = {
-			{time = 0, x = 450, y = 100, w = 1020, h = 960, r = 10, g = 10, b = 10, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-panel3", loop = 300, op = {23}, timer = 23, dst = {
-			{time = 0, x = 450, y = 100, w = 1020, h = 960, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-panel3", loop = 300, op = {-23}, timer = 33, dst = {
-			{time = 0, x = 450, y = 100, w = 1020, h = 960, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-gas", loop = 300, op = {23}, timer = 23, dst = {
-			-- option-panel3 の中身も、見た目の中心に寄るように少し上へ補正する。
-			{time = 0, x = 435, y = 295, w = 480, h = 760, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-gas", loop = 300, op = {-23}, timer = 33, dst = {
-			{time = 0, x = 435, y = 295, w = 480, h = 760, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-bga", loop = 300, op = {23}, timer = 23, dst = {
-			{time = 0, x = 460, y = -322, w = 288, h = 760, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-bga", loop = 300, op = {-23}, timer = 33, dst = {
-			{time = 0, x = 460, y = -322, w = 288, h = 760, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "option-autoadjust", loop = 300, op = {23}, timer = 23, dst = {
-			{time = 0, x = 790, y = -301, w = 260, h = 740, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "option-autoadjust", loop = 300, op = {-23}, timer = 33, dst = {
-			{time = 0, x = 790, y = -301, w = 260, h = 740, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "duration", loop = 300, op = {23}, timer = 23, dst = {
-			-- 数字セルの縮尺をそろえて、duration/judgetiming のにじみを抑える。
-			{time = 0, x = 1075, y = 725, w = 24, h = 27, r = 20, g = 255, b = 20, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "duration", loop = 300, op = {-23}, timer = 33, dst = {
-			{time = 0, x = 1075, y = 725, w = 24, h = 27, r = 20, g = 255, b = 20, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "duration-ms", loop = 300, op = {23}, timer = 23, dst = {
-			{time = 0, x = 950, y = 725, w = 24, h = 27, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "duration-ms", loop = 300, op = {-23}, timer = 33, dst = {
-			{time = 0, x = 950, y = 725, w = 24, h = 27, a = 255},
-			{time = 300, a = 0}
-		}},
-		{id = "judgetiming", loop = 300, op = {23}, timer = 23,  dst = {
-			{time = 0, x = 1195, y = 269, w = 23, h = 28, a = 0},
-			{time = 300, a = 255}
-		}},
-		{id = "judgetiming", loop = 300, op = {-23}, timer = 33,  dst = {
-			{time = 0, x = 1195, y = 269, w = 23, h = 28, a = 255},
-			{time = 300, a = 0}
-		}}}
+		add_fade_pair(skin.destination, {id = "blank", op = 21, timer_on = 21, timer_off = 31, base = {x = 310, y = 100, w = 1300, h = 960, r = 10, g = 10, b = 10}})
+		add_fade_pair(skin.destination, {id = "option-panel1", op = 21, timer_on = 21, timer_off = 31, base = {x = 310, y = 100, w = 1300, h = 960}})
+		add_fade_pair(skin.destination, {id = "option-pacemaker", op = 21, timer_on = 21, timer_off = 31, base = {x = 342, y = 0, w = 288, h = 760}})
+		add_fade_pair(skin.destination, {id = "option-random", op = 21, timer_on = 21, timer_off = 31, base = {x = 605, y = 0, w = 288, h = 757}})
+		add_fade_pair(skin.destination, {id = "option-gauge", op = 21, timer_on = 21, timer_off = 31, base = {x = 792, y = 0, w = 288, h = 760}})
+		add_fade_pair(skin.destination, {id = "option-dp", op = 21, timer_on = 21, timer_off = 31, base = {x = 972, y = 0, w = 288, h = 760}})
+		add_fade_pair(skin.destination, {id = "option-hsfix", op = 21, timer_on = 21, timer_off = 31, base = {x = 1157, y = 0, w = 288, h = 760}})
+		add_fade_pair(skin.destination, {id = "option-random2", op = 21, timer_on = 21, timer_off = 31, base = {x = 1337, y = 0, w = 288, h = 760}})
+		add_fade_pair(skin.destination, {id = "blank", op = 22, timer_on = 22, timer_off = 32, base = {x = 450, y = 100, w = 1020, h = 960, r = 10, g = 10, b = 10}})
+		add_fade_pair(skin.destination, {id = "option-panel2", op = 22, timer_on = 22, timer_off = 32, base = {x = 450, y = 100, w = 1020, h = 960}})
+		-- option-panel2 の中身は、見た目の中心に寄るように少し上へ補正する。
+		add_fade_pair(skin.destination, {id = "option-exjudge", op = 22, timer_on = 22, timer_off = 32, base = {x = 517, y = -227, w = 280, h = 680}})
+		add_fade_pair(skin.destination, {id = "option-constant", op = 22, timer_on = 22, timer_off = 32, base = {x = 637, y = 290, w = 280, h = 680}})
+		add_fade_pair(skin.destination, {id = "option-judgearea", op = 22, timer_on = 22, timer_off = 32, base = {x = 757, y = -227, w = 280, h = 680}})
+		add_fade_pair(skin.destination, {id = "option-legacy", op = 22, timer_on = 22, timer_off = 32, base = {x = 877, y = 290, w = 280, h = 680}})
+		add_fade_pair(skin.destination, {id = "option-marknote", op = 22, timer_on = 22, timer_off = 32, base = {x = 997, y = -227, w = 280, h = 680}})
+		add_fade_pair(skin.destination, {id = "option-bpmguide", op = 22, timer_on = 22, timer_off = 32, base = {x = 1117, y = 290, w = 280, h = 680}})
+		add_fade_pair(skin.destination, {id = "option-nomine", op = 22, timer_on = 22, timer_off = 32, base = {x = 1237, y = -227, w = 280, h = 680}})
+		add_fade_pair(skin.destination, {id = "blank", op = 23, timer_on = 23, timer_off = 33, base = {x = 450, y = 100, w = 1020, h = 960, r = 10, g = 10, b = 10}})
+		add_fade_pair(skin.destination, {id = "option-panel3", op = 23, timer_on = 23, timer_off = 33, base = {x = 450, y = 100, w = 1020, h = 960}})
+		-- option-panel3 の中身も、見た目の中心に寄るように少し上へ補正する。
+		add_fade_pair(skin.destination, {id = "option-gas", op = 23, timer_on = 23, timer_off = 33, base = {x = 435, y = 295, w = 480, h = 760}})
+		add_fade_pair(skin.destination, {id = "option-bga", op = 23, timer_on = 23, timer_off = 33, base = {x = 460, y = -322, w = 288, h = 760}})
+		add_fade_pair(skin.destination, {id = "option-autoadjust", op = 23, timer_on = 23, timer_off = 33, base = {x = 790, y = -301, w = 260, h = 740}})
+		-- 数字セルの縮尺をそろえて、duration/judgetiming のにじみを抑える。
+		add_fade_pair(skin.destination, {id = "duration", op = 23, timer_on = 23, timer_off = 33, base = {x = 1075, y = 725, w = 24, h = 27, r = 20, g = 255, b = 20}})
+		add_fade_pair(skin.destination, {id = "duration-ms", op = 23, timer_on = 23, timer_off = 33, base = {x = 950, y = 725, w = 24, h = 27}})
+		add_fade_pair(skin.destination, {id = "judgetiming", op = 23, timer_on = 23, timer_off = 33, base = {x = 1195, y = 269, w = 23, h = 28}})
 
   
   local function createTarget()

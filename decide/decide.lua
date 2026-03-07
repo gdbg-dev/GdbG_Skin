@@ -22,6 +22,15 @@ local header = {
 	input = 500,
 }
 
+local function build_slide_fade_frames(x, y_start, y_end, w, h, extra)
+	local base = extra or {}
+	return {
+		{time = 0, acc = 1, x = x, y = y_start, w = w, h = h, a = 0, r = base.r, g = base.g, b = base.b},
+		{time = 1500, acc = 1, x = x, y = y_end, w = w, h = h, a = 255, r = base.r, g = base.g, b = base.b},
+		{time = 3500, acc = 1, x = x, y = y_start, w = w, h = h, a = 255, r = base.r, g = base.g, b = base.b}
+	}
+end
+
 local function append_difficulty_images(images, difficulties)
 	for i, difficulty in ipairs(difficulties) do
 		table.insert(images, {
@@ -57,20 +66,12 @@ local function append_difficulty_destinations(destinations, difficulties)
 		table.insert(destinations, {
 			id = difficulty.id,
 			op = {difficulty.op},
-			dst = {
-				{time = 0, x = 820, y = 890, w = 320, h = 60, a = 0},
-				{time = 1500, x = 820, y = 940, w = 320, h = 60, a = 255},
-				{time = 3500, x = 820, y = 890, w = 320, h = 60, a = 255}
-			}
+			dst = build_slide_fade_frames(820, 890, 940, 320, 60)
 		})
 		table.insert(destinations, {
 			id = "n_" .. difficulty.id,
 			op = {difficulty.op},
-			dst = {
-				{time = 0, x = 1200, y = 1150, w = 95, h = 124, a = 0},
-				{time = 1500, x = 1200, y = 1150, w = 95, h = 124, a = 255},
-				{time = 3500, x = 1200, y = 1150, w = 95, h = 124, a = 255}
-			}
+			dst = build_slide_fade_frames(1200, 1100, 1150, 95, 124)
 		})
 	end
 end
@@ -125,22 +126,14 @@ local function main()
 	skin.destination = {
 		{id = "bg1", dst = {{x = 0, y = 0, w = 1920, h = 1080}}},
 		{id = "bg2", dst = {{x = 0, y = 0, w = 1920, h = 1080, a = 80}}},
-		{id = "logo", dst = {{x = 785, y = 250, w = 1036, h = 1074, a = 190}}},
-		{id = "genre", dst = {
-			{time = 0, x = 960, y = 450, w = 1300, h = 58, a = 0},
-			{time = 1500, x = 960, y = 500, w = 1300, h = 58, a = 255},
-			{time = 3500, x = 960, y = 450, w = 1300, h = 58, a = 255},
-		}},
-		{id = "title", dst = {
-			{time = 0, acc = 1, x = 960, y = 900, w = 1720, h = 40, a = 0},
-			{time = 1500, acc = 1, x = 960, y = 950, w = 1720, h = 40, a = 255},
-			{time = 3500, acc = 1, x = 960, y = 900, w = 1720, h = 40, a = 255},
-		}},
-		{id = "artist", dst = {
-			{time = 0, acc = 1, x = 960, y = 650, w = 1720, h = 40, a = 0},
-			{time = 1500, acc = 1, x = 960, y = 700, w = 1720, h = 40, a = 255},
-			{time = 3500, acc = 1, x = 960, y = 650, w = 1720, h = 40, a = 255},
-		}},
+		-- ロゴは画面中央に配置する。
+		{id = "logo", dst = {{x = 442, y = 3, w = 1036, h = 1074, a = 190}}},
+		{id = "genre",
+			-- テキストと難易度は同じ easing / 移動量でそろえて、見た目のテンポを統一する。
+			dst = build_slide_fade_frames(960, 450, 500, 1300, 58)
+		},
+		{id = "title", dst = build_slide_fade_frames(960, 900, 950, 1720, 40)},
+		{id = "artist", dst = build_slide_fade_frames(960, 650, 700, 1720, 40)},
 	}
 	append_difficulty_destinations(skin.destination, difficulties)
 

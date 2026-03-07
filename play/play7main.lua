@@ -208,9 +208,12 @@ local function main()
 
 	skin.source = build_sources()
 
+	local score_label_font_path = "../fonts/Audiowide-Regular.ttf"
+
 	skin.font = {
-		{id = 0, path = "font/Mplus1p-Medium.ttf"},
-		{id = 1, path = "font/Mplus1p-ExtraBold.ttf"},
+		{id = 0, path = "../fonts/Mplus1p-Medium.ttf"},
+		{id = 1, path = "../fonts/Mplus1p-ExtraBold.ttf"},
+		{id = 2, path = score_label_font_path},
 	}
 
 	skin.image = build_images(geometry, notesInfo)
@@ -218,7 +221,7 @@ local function main()
 	skin.value = build_values()
 	skin.text = build_text()
 	skin.slider = {
-		{id = "song-progress", src = "system_src", x = 1080, y = 890, w = 20, h = 30, angle = 2, range = 710, type = 6},
+		{id = "song-progress", src = "system_src", x = 1090, y = 900, w = 15, h = 30, angle = 2, range = 745, type = 6},
 		{id = "lanecover", src = "lanecover_src", x = 0, y = 0, w = -1, h = -1, angle = 2, range = 853, type = 4},
 
 	}
@@ -401,7 +404,7 @@ local function main()
 
 	-- 	--名前下の自由入力欄
 	-- 	--ここから
-	-- 	table.insert(skin.font, {id = 2, path = "font/Mplus1p-Regular.ttf"})
+	-- 	table.insert(skin.font, {id = 2, path = "../fonts/Mplus1p-Regular.ttf"})
 	-- 		--公式のサンプルコピペしてる　マジで何してるかわからん
 	-- 		local lua_path = skin_config.get_path("common/player info/freespace.lua")
 	-- 		local frame_parts_status, frame_parts = pcall(function()
@@ -461,14 +464,14 @@ local function main()
    if isScratchRight() then
    table.insert(skin.destination,
    {id = "lanes_button_2P", loop = 800, dst ={
-    {time = 0, x = geometry.lane_x + geometry.play_position, y = 0, w = 525, h = 100, acc = 2},
+    {time = 0, x = geometry.lane_x + geometry.play_position, y = 0, w = geometry.lane_w, h = 100, acc = 2},
     {time = 200},
     {time = 800, y = -100 + geometry.lane_y}
    }})
   else
    table.insert(skin.destination,
    {id = "lanes_button", loop = 800, dst ={
-    {time = 0, x = geometry.lane_x + geometry.play_position, y = 0, w = 525, h = 100, acc = 2},
+    {time = 0, x = geometry.lane_x + geometry.play_position, y = 0, w = geometry.lane_w, h = 100, acc = 2},
     {time = 200},
     {time = 800, y = -100 + geometry.lane_y}
    }})
@@ -896,32 +899,28 @@ table.insert(skin.destination,
 
 --ゲージ
 	--ゲージ本体
- if is2P() then --2P
-	table.insert(skin.destination, {id = "gauge", dst = {{x = 1870 , y = 120, w = -350, h = 34}}})
- else -- 1P
-  table.insert(skin.destination, {id = "gauge", dst = {{x = 70, y = 120, w = 350, h = 34}}})
+ if is2P() then --2P: 数字 ← ゲージ ← song-progress-bar（右側x=1870～1940）、左右反転
+	table.insert(skin.destination, {id = "gauge", dst = {{x = 1870, y = 120, w = -350, h = 34}}})
+	-- ゲージの数字（左側に横一列で配置）
+	table.insert(skin.destination, {id = "gauge-num", dst = {{x = 69 + geometry.play_position, y = 128, w = 29, h = 36}}})
+	table.insert(skin.destination, {id = "gauge-DnP", dst = {{x = 158 + geometry.play_position, y = 128, w = 79, h = 36}}})
+	table.insert(skin.destination, {id = "gauge-adot-num", dst = {{x = 171 + geometry.play_position, y = 128, w = 29, h = 36}}})
+	
+ else -- 1P: song-progress-bar（左側x=0-info_position～70-info_position）← ゲージ ← 数字
+  table.insert(skin.destination, {id = "gauge", dst = {{x = 70 - geometry.info_position, y = 120, w = 350, h = 34}}})
+  -- ゲージの数字（右側に横一列で配置）
+  table.insert(skin.destination, {id = "gauge-num", dst = {{x = 420 - geometry.info_position, y = 128, w = 29, h = 36}}})
+  table.insert(skin.destination, {id = "gauge-DnP", dst = {{x = 500 - geometry.info_position, y = 128, w = 79, h = 36}}})
+  table.insert(skin.destination, {id = "gauge-adot-num", dst = {{x = 510 - geometry.info_position, y = 128, w = 29, h = 36}}})
+  
  end
-
-	--ゲージの数字
- if is2P() then --2P
-  table.insert(skin.destination, {id = "gauge-num", dst = {{x = 60 + geometry.play_position, y = 130, w = 29, h = 36}}})
-  --小数点以下
-  table.insert(skin.destination, {id = "gauge-adot-num", dst = {{x = 171 + geometry.play_position, y = 130, w = 29, h = 36}}})
-  --小数点とパーセント
-  table.insert(skin.destination, {id = "gauge-DnP", dst = {{x = 151 + geometry.play_position, y = 130, w = 79, h = 36}}})
-  else -- 1P
-   table.insert(skin.destination, {id = "gauge-num", dst = {{x = 410 + geometry.play_position, y = 130, w = 29, h = 36}}})
-   --小数点以下
-   table.insert(skin.destination, {id = "gauge-adot-num", dst = {{x = 521 + geometry.play_position, y = 130, w = 29, h = 36}}})
-   --小数点とパーセント
-   table.insert(skin.destination, {id = "gauge-DnP", dst = {{x = 506 + geometry.play_position, y = 130, w = 79, h = 36}}})
-  end
  
 
 	--ヘッダー
 	table.insert(skin.destination,
 	{id = "playoption_frame", dst = {
-		{x = 25 + geometry.play_position, y = -35, w = 750, h = 230}
+		-- 原寸(560x179)で描画して、枠画像のにじみを抑える。
+		{x = 120 + geometry.play_position, y = 0, w = 560, h = 179}
 	}})
 
 
@@ -936,7 +935,13 @@ table.insert(skin.destination,
 --ここから
 	--Score
 	--見出し
-	table.insert(skin.destination, {id = "score-head", dst = {{x = 583 + geometry.score_position, y= 370, w = 250, h = 170}}})
+	table.insert(skin.destination, {id = "score-label-your", filter = 1, dst = {{x = 595 + geometry.score_position, y = 480, w = 180, h = 16, r = 48, g = 205, b = 254}}})
+	table.insert(skin.destination, {id = "score-label-mybest", filter = 1, dst = {{x = 595 + geometry.score_position, y = 427, w = 180, h = 16, r = 45, g = 255, b = 222}}})
+	if is2P() then
+		table.insert(skin.destination, {id = "score-label-target", filter = 1, dst = {{x = 595 + geometry.score_position, y = 380, w = 180, h = 16, r = 255, g = 100, b = 100}}})
+	else
+		table.insert(skin.destination, {id = "score-label-target", filter = 1, dst = {{x = 595 + geometry.score_position, y = 380, w = 180, h = 16, r = 255, g = 100, b = 100}}})
+	end
 	---開始前にスコアのダミー表示するやつ
 	table.insert(skin.image, 
 	{id = "score_dummy", src = "system_src", x = 1500 + geometry.score_position, y= 1150, w = 393, h = 193})
@@ -951,17 +956,18 @@ table.insert(skin.destination,
 	--グラフのグリッド
 	table.insert(skin.destination,
 	{id = "scoregraph-grid", dst = {
-		{x = 578 + geometry.score_position, y= 840, w = 250, h = 230}}})
+		-- 原寸(237x211)で描画して、線のぼけを抑える。
+		{x = 584 + geometry.score_position, y = 850, w = 237, h = 211}}})
    --レート・小数点以下・ドット、パーセント
    table.insert(skin.destination,
    {id = "hispeed-num", dst = {
-    {x = 450 + geometry.score_position, y= 30, w = 24, h = 22}}})
+    {x = 450 + geometry.score_position, y= 30, w = 18, h = 22}}})
    table.insert(skin.destination,
    {id = "rate-DnP1", dst = {
     {x = 475 + geometry.score_position, y= 15, w = 50, h = 50}}})
    table.insert(skin.destination,
    {id = "hispeed-adot-num", dst = {
-    {x = 485 + geometry.score_position, y= 30, w = 24, h = 22}}})
+	    {x = 485 + geometry.score_position, y= 30, w = 18, h = 22}}})
  
 	--EXスコア
 --"lefttime"と"hispeed"の見出し
@@ -971,11 +977,11 @@ table.insert(skin.destination,
 		if is2P() then --2P
    table.insert(skin.destination,
    {id = "Score-num", dst = {
-    {x = 1450 , y= 10, w = 30, h = 43}}})
+    {x = 1450 , y= 30, w = 35, h = 43}}})
 		else --1P
    table.insert(skin.destination,
    {id = "Score-num", dst = {
-    {x = 140, y= 10, w = 30, h = 43}}})
+    {x = 140, y= 30, w = 35, h = 43}}})
 		end
 
 
@@ -1062,9 +1068,9 @@ table.insert(skin.destination,
 		for i in ipairs(id) do
 			table.insert(skin.image,
 				{id = id[i], src = "system_src", x = 1500, y= 10 + 28 * (i - 1), w = 110, h = 28})
-			table.insert(skin.imageset,
-				{id = "score-target-tx", ref = 22, images = { id[1], id[2], id[3], id[4], id[5], id[6], id[7], id[8], id[9], id[10], id[11] }})
 		end
+		table.insert(skin.imageset,
+			{id = "score-target-tx", ref = 22, images = { id[1], id[2], id[3], id[4], id[5], id[6], id[7], id[8], id[9], id[10], id[11] }})
 	end
 	--上で定義した奴を配置
  if is2P() then
@@ -1074,16 +1080,26 @@ table.insert(skin.destination,
  else
   table.insert(skin.destination,
   {id = "targetname", dst = {
-   {x = 840 + geometry.score_position, y= 555, w = 75, h = 22}}})
+   {x = 845 + geometry.score_position, y= 555, w = 110, h = 24}}})
  end
 	--ターゲットとの差
-	table.insert(skin.destination,
-	{id = "score-targ-dif", dst = {
-		{x = 735 + geometry.score_position, y= 380, w = 18, h = 24}}})
-	--自己ベストの点数
-	table.insert(skin.destination,
-	{id = "score-targ", dst = {
-		{x = 753 + geometry.score_position, y= 350, w = 18, h = 24}}})
+	if is2P() then
+		table.insert(skin.destination,
+		{id = "score-targ-dif", dst = {
+			{x = 735 + geometry.score_position, y= 380, w = 18, h = 24}}})
+		--自己ベストの点数
+		table.insert(skin.destination,
+		{id = "score-targ", dst = {
+			{x = 753 + geometry.score_position, y= 350, w = 18, h = 24}}})
+	else
+		table.insert(skin.destination,
+		{id = "score-targ-dif", dst = {
+			{x = 735 + geometry.score_position, y= 380, w = 18, h = 24}}})
+		--自己ベストの点数
+		table.insert(skin.destination,
+		{id = "score-targ", dst = {
+			{x = 753 + geometry.score_position, y= 350, w = 18, h = 24}}})
+	end
 	
 	--スコアグラフ
 	--ターゲット　現在
