@@ -938,9 +938,9 @@ table.insert(skin.destination,
 	table.insert(skin.destination, {id = "score-label-your", filter = 1, dst = {{x = 595 + geometry.score_position, y = 480, w = 180, h = 16, r = 48, g = 205, b = 254}}})
 	table.insert(skin.destination, {id = "score-label-mybest", filter = 1, dst = {{x = 595 + geometry.score_position, y = 427, w = 180, h = 16, r = 45, g = 255, b = 222}}})
 	if is2P() then
-		table.insert(skin.destination, {id = "score-label-target", filter = 1, dst = {{x = 595 + geometry.score_position, y = 380, w = 180, h = 16, r = 255, g = 100, b = 100}}})
+		table.insert(skin.destination, {id = "score-label-target", filter = 1, dst = {{x = 598 + geometry.score_position, y = 380, w = 180, h = 16, r = 255, g = 100, b = 100}}})
 	else
-		table.insert(skin.destination, {id = "score-label-target", filter = 1, dst = {{x = 595 + geometry.score_position, y = 380, w = 180, h = 16, r = 255, g = 100, b = 100}}})
+		table.insert(skin.destination, {id = "score-label-target", filter = 1, dst = {{x = 598 + geometry.score_position, y = 380, w = 180, h = 16, r = 255, g = 100, b = 100}}})
 	end
 	---開始前にスコアのダミー表示するやつ
 	table.insert(skin.image, 
@@ -957,7 +957,7 @@ table.insert(skin.destination,
 	table.insert(skin.destination,
 	{id = "scoregraph-grid", dst = {
 		-- 原寸(237x211)で描画して、線のぼけを抑える。
-		{x = 584 + geometry.score_position, y = 850, w = 237, h = 211}}})
+		{x = 589 + geometry.score_position, y = 850, w = 237, h = 211}}})
    --レート・小数点以下・ドット、パーセント
    table.insert(skin.destination,
    {id = "hispeed-num", dst = {
@@ -1014,21 +1014,21 @@ table.insert(skin.destination,
 	--スコアグラフ
 	--現在
  if is2P() then 
-	table.insert(skin.destination,
-	{id = "graph-now", dst = {
-		{x = 762 + geometry.score_position, y=550, w = 68, h = 500}}})
-	--現在　予想値
-	table.insert(skin.destination,
-	{id = "graph-final", dst = {
-		{x = 762 + geometry.score_position, y=550, w = 68, h = 500, a = 80}}})
+		table.insert(skin.destination,
+		{id = "graph-now", dst = {
+			{x = 762 + geometry.score_position, y=550, w = 68, h = 480}}})
+		--現在　予想値
+		table.insert(skin.destination,
+		{id = "graph-final", dst = {
+			{x = 762 + geometry.score_position, y=550, w = 68, h = 480, a = 80}}})
  else
- 	table.insert(skin.destination,
-	{id = "graph-now", dst = {
-		{x = 610 + geometry.score_position, y=550, w = 68, h = 500}}})
-	--現在　予想値
-	table.insert(skin.destination,
-	{id = "graph-final", dst = {
-		{x = 610 + geometry.score_position, y=550, w = 68, h = 500, a = 80}}})
+	 	table.insert(skin.destination,
+		{id = "graph-now", dst = {
+			{x = 610 + geometry.score_position, y=550, w = 68, h = 480}}})
+		--現在　予想値
+		table.insert(skin.destination,
+		{id = "graph-final", dst = {
+			{x = 610 + geometry.score_position, y=550, w = 68, h = 480, a = 80}}})
  end
 
 
@@ -1055,12 +1055,12 @@ table.insert(skin.destination,
 
 	table.insert(skin.destination,
 	{id = "graph-best-now", dst = {
-		{x = 686 + geometry.score_position, y=550, w = 68, h = 500}}})
+		{x = 686 + geometry.score_position, y=550, w = 68, h = 480}}})
 	--自己ベスト　最終
 	table.insert(skin.destination,
 	{id = "graph-best", loop = 600, dst = {
 		{time = 0, x = 686 + geometry.score_position, y=550, w = 68, h = 0, a = 80, acc = 2},
-		{time = 600, h = 400}}})
+		{time = 600, h = 480}}})
 
 	--ターゲットの文字
 	do
@@ -1106,21 +1106,21 @@ table.insert(skin.destination,
   if is2P() then
    table.insert(skin.destination,
    {id = "graph-target-now", dst = {
-    {x = 610 + geometry.score_position, y= 550, w = 68, h = 500}}})
+    {x = 610 + geometry.score_position, y= 550, w = 68, h = 480}}})
    --ターゲット　最終
    table.insert(skin.destination,
-   {id = "graph-target", loop = 600, dst = {
-    {time = 0, x = 610 + geometry.score_position, y=550, w = 68, h = 0, a = 80, acc = 2},
-    {time = 600, h = 400}}}) 
+	   {id = "graph-target", loop = 600, dst = {
+	    {time = 0, x = 610 + geometry.score_position, y=550, w = 68, h = 0, a = 80, acc = 2},
+	    {time = 600, h = 480}}}) 
    else
     table.insert(skin.destination,
     {id = "graph-target-now", dst = {
-     {x = 762 + geometry.score_position, y= 550, w = 68, h = 500}}})
+     {x = 762 + geometry.score_position, y= 550, w = 68, h = 480}}})
     --ターゲット　最終
     table.insert(skin.destination,
-    {id = "graph-target", loop = 600, dst = {
-     {time = 0, x = 762 + geometry.score_position, y=550, w = 68, h = 0, a = 80, acc = 2},
-     {time = 600, h = 400}}})
+	    {id = "graph-target", loop = 600, dst = {
+	     {time = 0, x = 762 + geometry.score_position, y=550, w = 68, h = 0, a = 80, acc = 2},
+	     {time = 600, h = 480}}})
    end
 
 	--判定詳細
