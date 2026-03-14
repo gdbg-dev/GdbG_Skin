@@ -272,7 +272,7 @@ local function build_songlist_entries(active)
 			x = x,
 			y = 1100 - (i - 1) * 60,
 			w = w,
-			h = 60
+			h = 60,
 		}
 		if i == 8 then
 			dst.x = active and 1100 or 1200
@@ -281,7 +281,9 @@ local function build_songlist_entries(active)
 			dst.w = 1000
 		end
 		if not active and i ~= 8 then
-			dst.a = 50
+			dst.a = 110
+		elseif active and i == 8 then
+			dst.a = 80
 		end
 		table.insert(entries, {id = "bar", dst = {dst}})
 	end
