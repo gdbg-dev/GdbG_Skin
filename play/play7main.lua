@@ -956,8 +956,8 @@ table.insert(skin.destination,
 	--グラフのグリッド
 	table.insert(skin.destination,
 	{id = "scoregraph-grid", dst = {
-		-- 原寸(237x211)で描画して、線のぼけを抑える。
-		{x = 589 + geometry.score_position, y = 850, w = 237, h = 211}}})
+		-- 線間隔が60px -> 55pxになるよう、原寸比11/12で縮小描画する。
+		{x = 610 + geometry.score_position, y = 875, w = 217.25, h = 193.4166666667}}})
    --レート・小数点以下・ドット、パーセント
    table.insert(skin.destination,
    {id = "hispeed-num", dst = {
@@ -1010,57 +1010,63 @@ table.insert(skin.destination,
    end, dst = {
     {x = 780 + geometry.score_position, y= 480, w = 94, h = 37}}})
 
-	
 	--スコアグラフ
-	--現在
+	local graph_width = 220 * 11 / 12 / 3
+	local graph_target_x = is2P() and 625 or 760
+	local graph_best_x = is2P() and (graph_target_x + graph_width) or (graph_target_x - graph_width)
+	local graph_now_x = is2P() and (graph_target_x + graph_width * 2) or (graph_target_x - graph_width * 2)
  if is2P() then 
 		table.insert(skin.destination,
+		--現在(青)
 		{id = "graph-now", dst = {
-			{x = 762 + geometry.score_position, y=550, w = 68, h = 500}}})
-		--現在　予想値
+			{x = graph_now_x + geometry.score_position, y=550, w = graph_width, h = 500}}})
+		--予想(青透明)
 		table.insert(skin.destination,
 		{id = "graph-final", dst = {
-			{x = 762 + geometry.score_position, y=550, w = 68, h = 500, a = 80}}})
+			{x = graph_now_x + geometry.score_position, y=550, w = graph_width, h = 500, a = 80}}})
  else
+		--現在(青)
 	 	table.insert(skin.destination,
 		{id = "graph-now", dst = {
-			{x = 610 + geometry.score_position, y=550, w = 68, h = 500}}})
-		--現在　予想値
+			{x = graph_now_x + geometry.score_position, y=550, w = graph_width, h = 500}}})
+		--予想(青透明)
 		table.insert(skin.destination,
 		{id = "graph-final", dst = {
-			{x = 610 + geometry.score_position, y=550, w = 68, h = 500, a = 80}}})
+			{x = graph_now_x + geometry.score_position, y=550, w = graph_width, h = 500, a = 80}}})
  end
 
-
-	--自己ベストとの差
-	table.insert(skin.destination,
-	{id = "score-best-dif", draw = function()
-		if (main_state.float_number(113) ~= 0) then
-			return true
-		end
-	end, dst = {
-		{x = 736 + geometry.score_position, y= 450, w = 18, h = 24}}})
-	--自己ベストの点数
-	table.insert(skin.destination,
-	{id = "score-best", draw = function()
-		if (main_state.float_number(113) ~= 0) then
-			return true
-		end
-	end, dst = {
-		{x = 756 + geometry.score_position, y= 420, w = 18, h = 24}}})
-
-
-	--スコアグラフ
-	--自己ベスト　現在
+	--自己ベスト　現在(緑透明)
 
 	table.insert(skin.destination,
 	{id = "graph-best-now", dst = {
-		{x = 686 + geometry.score_position, y=550, w = 68, h = 490}}})
-	--自己ベスト　最終
+		{x = graph_best_x + geometry.score_position, y=550, w = graph_width, h = 500}}})
+	--自己ベスト　最終(緑)
 	table.insert(skin.destination,
 	{id = "graph-best", loop = 600, dst = {
-		{time = 0, x = 686 + geometry.score_position, y=550, w = 68, h = 0, a = 80, acc = 2},
-		{time = 600, h = 490}}})
+		{time = 0, x = graph_best_x + geometry.score_position, y=550, w = graph_width, h = 0, a = 80, acc = 2},
+		{time = 600, h = 500}}})
+
+--スコアグラフ(赤)
+	--ターゲット　現在
+  if is2P() then
+   table.insert(skin.destination,
+   {id = "graph-target-now", dst = {
+    {x = graph_target_x + geometry.score_position, y= 550, w = graph_width, h = 500}}})
+   --ターゲット　最終
+   table.insert(skin.destination,
+	   {id = "graph-target", loop = 600, dst = {
+	    {time = 0, x = graph_target_x + geometry.score_position, y=550, w = graph_width, h = 0, a = 80, acc = 2},
+	    {time = 600, h = 500}}}) 
+   else
+    table.insert(skin.destination,
+    {id = "graph-target-now", dst = {
+     {x = graph_target_x + geometry.score_position, y= 550, w = graph_width, h = 500}}})
+    --ターゲット　最終
+    table.insert(skin.destination,
+	    {id = "graph-target", loop = 600, dst = {
+	     {time = 0, x = graph_target_x + geometry.score_position, y=550, w = graph_width, h = 0, a = 80, acc = 2},
+	     {time = 600, h = 500}}})
+   end
 
 	--ターゲットの文字
 	do
@@ -1076,7 +1082,7 @@ table.insert(skin.destination,
  if is2P() then
 	table.insert(skin.destination,
 	{id = "targetname", dst = {
-		{x = 472 + geometry.score_position, y= 555, w = 110, h = 24}}})
+		{x = 554 + geometry.score_position, y= 555, w = 110, h = 24}}})
  else
   table.insert(skin.destination,
   {id = "targetname", dst = {
@@ -1101,27 +1107,7 @@ table.insert(skin.destination,
 			{x = 753 + geometry.score_position, y= 350, w = 18, h = 24}}})
 	end
 	
-	--スコアグラフ
-	--ターゲット　現在
-  if is2P() then
-   table.insert(skin.destination,
-   {id = "graph-target-now", dst = {
-    {x = 610 + geometry.score_position, y= 550, w = 68, h = 490}}})
-   --ターゲット　最終
-   table.insert(skin.destination,
-	   {id = "graph-target", loop = 600, dst = {
-	    {time = 0, x = 610 + geometry.score_position, y=550, w = 68, h = 0, a = 80, acc = 2},
-	    {time = 600, h = 490}}}) 
-   else
-    table.insert(skin.destination,
-    {id = "graph-target-now", dst = {
-     {x = 762 + geometry.score_position, y= 550, w = 68, h = 490}}})
-    --ターゲット　最終
-    table.insert(skin.destination,
-	    {id = "graph-target", loop = 600, dst = {
-	     {time = 0, x = 762 + geometry.score_position, y=550, w = 68, h = 0, a = 80, acc = 2},
-	     {time = 600, h = 490}}})
-   end
+	
 
 	--判定詳細
 	--各見出しの切り出し
