@@ -61,9 +61,9 @@ function M.append_intro_destinations(skin, geometry, helpers)
 		add({id = "song-progress-bar", dst = {{x = 1870, y = 0, w = 70, h = 1080}}})
 		add({id = "song-progress", dst = {{x = 1892, y = 1015, w = 10, h = 20}}})
 	else
-		add({id = "song-left-m", dst = {{x = 250, y = 30, w = 24, h = 22}}})
-		add({id = "song-left-s", dst = {{x = 310, y = 30, w = 24, h = 22}}})
-		add({id = "song-time-colon", dst = {{x = 292, y = 30, w = 50, h = 50}}})
+		add({id = "song-left-m", dst = {{x = 260, y = 30, w = 24, h = 22}}})
+		add({id = "song-left-s", dst = {{x = 320, y = 30, w = 24, h = 22}}})
+		add({id = "song-time-colon", dst = {{x = 302, y = 30, w = 50, h = 50}}})
 		add({id = "song-progress-bar", dst = {{x = 0 - geometry.info_position, y = 0, w = 70, h = 1080}}})
 		add({id = "song-progress", dst = {{x = 21 - geometry.info_position, y = 1007, w = 10, h = 20}}})
 	end

@@ -902,16 +902,16 @@ table.insert(skin.destination,
  if is2P() then --2P: 数字 ← ゲージ ← song-progress-bar（右側x=1870～1940）、左右反転
 	table.insert(skin.destination, {id = "gauge", dst = {{x = 1870, y = 120, w = -350, h = 34}}})
 	-- ゲージの数字（左側に横一列で配置）
-	table.insert(skin.destination, {id = "gauge-num", dst = {{x = 69 + geometry.play_position, y = 128, w = 29, h = 36}}})
-	table.insert(skin.destination, {id = "gauge-DnP", dst = {{x = 158 + geometry.play_position, y = 128, w = 79, h = 36}}})
-	table.insert(skin.destination, {id = "gauge-adot-num", dst = {{x = 171 + geometry.play_position, y = 128, w = 29, h = 36}}})
+	table.insert(skin.destination, {id = "gauge-num", dst = {{x = 69 + geometry.play_position, y = 120, w = 29, h = 36}}})
+	table.insert(skin.destination, {id = "gauge-DnP", dst = {{x = 158 + geometry.play_position, y = 120, w = 79, h = 36}}})
+	table.insert(skin.destination, {id = "gauge-adot-num", dst = {{x = 171 + geometry.play_position, y = 120, w = 29, h = 36}}})
 	
  else -- 1P: song-progress-bar（左側x=0-info_position～70-info_position）← ゲージ ← 数字
   table.insert(skin.destination, {id = "gauge", dst = {{x = 70 - geometry.info_position, y = 120, w = 350, h = 34}}})
   -- ゲージの数字（右側に横一列で配置）
-  table.insert(skin.destination, {id = "gauge-num", dst = {{x = 420 - geometry.info_position, y = 128, w = 29, h = 36}}})
-  table.insert(skin.destination, {id = "gauge-DnP", dst = {{x = 500 - geometry.info_position, y = 128, w = 79, h = 36}}})
-  table.insert(skin.destination, {id = "gauge-adot-num", dst = {{x = 510 - geometry.info_position, y = 128, w = 29, h = 36}}})
+  table.insert(skin.destination, {id = "gauge-num", dst = {{x = 420 - geometry.info_position, y = 120, w = 29, h = 36}}})
+  table.insert(skin.destination, {id = "gauge-DnP", dst = {{x = 500 - geometry.info_position, y = 120, w = 79, h = 36}}})
+  table.insert(skin.destination, {id = "gauge-adot-num", dst = {{x = 510 - geometry.info_position, y = 120, w = 29, h = 36}}})
   
  end
  
@@ -981,7 +981,7 @@ table.insert(skin.destination,
 		else --1P
    table.insert(skin.destination,
    {id = "Score-num", dst = {
-    {x = 140, y= 30, w = 35, h = 43}}})
+    {x = 70, y= 30, w = 35, h = 43}}})
 		end
 
 

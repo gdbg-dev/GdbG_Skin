@@ -9,7 +9,7 @@ return function()
 		{id = "diff-best", src = "system_src", x = 470, y = 1220, w = 264, h = 56, divx = 12, divy = 2, digit = 5, ref = 152, align = 1},
 		{id = "diff-target", src = "system_src", x = 470, y = 1220, w = 264, h = 56, divx = 12, divy = 2, digit = 5, ref = 153, align = 1},
 		{id = "fsms-num", src = "system_src", x = 470, y = 1130, w = 180, h = 36, divx = 12, divy = 2, digit = 4, ref = 525, align = 1},
-		{id = "Score-num", src = "system_src", x = 10, y = 990, w = 610, h = 75, divx = 10, digit = 5, ref = 101, align = 1},
+		{id = "Score-num", src = "system_src", x = 10, y = 990, w = 610, h = 75, divx = 10, digit = 5, ref = 101, align = 0},
 		{id = "rate-num", src = "system_src", x = 100, y = 1403, w = 360, h = 49, divx = 10, digit = 3, ref = 102, align = 0},
 		{id = "rate-adot-num", src = "system_src", x = 100, y = 1452, w = 308, h = 37, divx = 11, digit = 2, ref = 103, align = 0},
 		{id = "scorediff", src = "system_src", x = 10, y = 990, w = 610, h = 75, divx = 10, digit = 5, ref = 12, align = 2},
