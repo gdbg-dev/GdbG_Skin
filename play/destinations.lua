@@ -52,7 +52,7 @@ function M.append_intro_destinations(skin, geometry, helpers)
 	end
 
 	add({id = "notes-head", dst = {{x = 585 + geometry.score_position, y = 300, w = 95, h = 21}}})
-	add({id = "note", dst = {{x = 790 + geometry.score_position, y = 280, w = 14, h = 18}}})
+	add({id = "note", dst = {{x = 790 + geometry.score_position, y = 279, w = 14, h = 20}}})
 
 	if is_2p() then
 		add({id = "song-left-m", dst = {{x = 720, y = 30, w = 24, h = 22}}})

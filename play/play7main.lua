@@ -174,7 +174,7 @@ local offset = {
 
 local header = {
 	type = 0,
-	name = "GroundbreakinG Skin Ver.0.1 7Keys",
+	name = "GroundbreakinG Skin Ver.2025 7Keys",
 	w = 1920,
 	h = 1080,
 	loadend = 3000,

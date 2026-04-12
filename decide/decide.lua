@@ -14,7 +14,7 @@
 
 local header = {
 	type = 6,
-	name ="GroundbreakinG Skin Ver.0.1 Decide",
+	name ="GroundbreakinG Skin Ver.2025 Decide",
 	w = 1920,
 	h = 1080,
 	fadeout = 500,

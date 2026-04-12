@@ -14,7 +14,7 @@
 local main_state = require("main_state")
 local header = {
 	type = 5,
-	name ="GroundbreakinG Skin Ver.0.1 Select",
+	name ="GroundbreakinG Skin Ver.2025 Select",
 	w = 1920,
 	h = 1080,
 	fadeout = 500,

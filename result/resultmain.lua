@@ -13,7 +13,7 @@ local filepath = {
 
 local header = {
 	type = 7,
-	name = "GroundbreakinG Skin Ver.0.1 Result",
+	name = "GroundbreakinG Skin Ver.2025 Result",
 	w = 1920,
 	h = 1080,
 	scene = 3600000,
